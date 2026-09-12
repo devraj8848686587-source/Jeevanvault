@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JeevanVault — Login</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  min-height:100vh;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#06111f;
+  color:#f5f7fb;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.container{
+  width:100%;
+  max-width:430px;
+}
+
+.logo{
+  text-align:center;
+  font-size:32px;
+  font-weight:800;
+  margin-bottom:10px;
+}
+
+.logo span{
+  color:#55d8ff;
+}
+
+.tagline{
+  text-align:center;
+  color:#91a4bd;
+  margin-bottom:28px;
+}
+
+.card{
+  background:#0d1d30;
+  border:1px solid #203650;
+  border-radius:24px;
+  padding:28px;
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
+}
+
+.tabs{
+  display:flex;
+  background:#081525;
+  padding:5px;
+  border-radius:13px;
+  margin-bottom:25px;
+}
+
+.tab{
+  width:50%;
+  padding:12px;
+  border:0;
+  border-radius:10px;
+  background:transparent;
+  color:#91a4bd;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.tab.active{
+  background:#182c44;
+  color:white;
+}
+
+h1{
+  font-size:28px;
+  margin-bottom:8px;
+}
+
+.subtitle{
+  color:#91a4bd;
+  line-height:1.5;
+  margin-bottom:23px;
+}
+
+label{
+  display:block;
+  font-size:14px;
+  font-weight:700;
+  margin-bottom:8px;
+}
+
+input{
+  width:100%;
+  padding:15px;
+  margin-bottom:17px;
+  border:1px solid #29425e;
+  border-radius:12px;
+  outline:none;
+  background:#081525;
+  color:white;
+  font-size:15px;
+}
+
+input:focus{
+  border-color:#55d8ff;
+}
+
+.main-btn{
+  width:100%;
+  padding:16px;
+  border:0;
+  border-radius:13px;
+  background:linear-gradient(135deg,#55d8ff,#7486ff);
+  color:#06111f;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+  margin-top:4px;
+}
+
+.main-btn:active{
+  transform:scale(.98);
+}
+
+.message{
+  display:none;
+  margin-top:18px;
+  padding:13px;
+  border-radius:12px;
+  background:#10283a;
+  color:#8ee8ff;
+  text-align:center;
+  font-size:14px;
+}
+
+.back{
+  display:block;
+  text-align:center;
+  margin-top:22px;
+  color:#91a4bd;
+  text-decoration:none;
+  font-size:14px;
+}
+
+.back:hover{
+  color:white;
+}
+
+.hidden{
+  display:none;
+}
+
+.security{
+  text-align:center;
+  color:#667d98;
+  font-size:12px;
+  margin-top:22px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="logo">Jeevan<span>Vault</span></div>
+  <div class="tagline">Your Digital Life. Organized.</div>
+
+  <div class="card">
+
+    <div class="tabs">
+      <button class="tab active" id="loginTab" onclick="showLogin()">
+        Login
+      </button>
+
+      <button class="tab" id="signupTab" onclick="showSignup()">
+        Create Account
+      </button>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="loginBox">
+
+      <h1>Welcome back 👋</h1>
+
+      <p class="subtitle">
+        Sign in to access your JeevanVault dashboard.
+      </p>
+
+      <label>Email</label>
+      <input
+        type="email"
+        id="loginEmail"
+        placeholder="you@example.com"
+      >
+
+      <label>Password</label>
+      <input
+        type="password"
+        id="loginPassword"
+        placeholder="Enter your password"
+      >
+
+      <button class="main-btn" onclick="login()">
+        Login to JeevanVault →
+      </button>
+
+    </div>
+
+    <!-- SIGN UP -->
+    <div id="signupBox" class="hidden">
+
+      <h1>Create your vault 🔐</h1>
+
+      <p class="subtitle">
+        Start organizing your digital life in one place.
+      </p>
+
+      <label>Your Name</label>
+      <input
+        type="text"
+        id="signupName"
+        placeholder="Enter your name"
+      >
+
+      <label>Email</label>
+      <input
+        type="email"
+        id="signupEmail"
+        placeholder="you@example.com"
+      >
+
+      <label>Password</label>
+      <input
+        type="password"
+        id="signupPassword"
+        placeholder="Create a password"
+      >
+
+      <button class="main-btn" onclick="signup()">
+        Create My Vault →
+      </button>
+
+    </div>
+
+    <div class="message" id="message"></div>
+
+    <a class="back" href="index.html">
+      ← Back to JeevanVault
+    </a>
+
+  </div>
+
+  <div class="security">
+    Prototype version • Do not enter sensitive personal information
+  </div>
+
+</div>
+
+<script>
+
+function showLogin(){
+
+  document.getElementById("loginBox").classList.remove("hidden");
+  document.getElementById("signupBox").classList.add("hidden");
+
+  document.getElementById("loginTab").classList.add("active");
+  document.getElementById("signupTab").classList.remove("active");
+
+  hideMessage();
+}
+
+function showSignup(){
+
+  document.getElementById("signupBox").classList.remove("hidden");
+  document.getElementById("loginBox").classList.add("hidden");
+
+  document.getElementById("signupTab").classList.add("active");
+  document.getElementById("loginTab").classList.remove("active");
+
+  hideMessage();
+}
+
+function signup(){
+
+  const name = document.getElementById("signupName").value.trim();
+  const email = document.getElementById("signupEmail").value.trim();
+  const password = document.getElementById("signupPassword").value;
+
+  if(!name || !email || !password){
+
+    showMessage("Please fill all fields.");
+
+    return;
+  }
+
+  localStorage.setItem(
+    "jeevanVaultUser",
+    JSON.stringify({
+      name:name,
+      email:email
+    })
+  );
+
+  showMessage(
+    "Account created successfully! You can now login."
+  );
+
+  setTimeout(showLogin,1200);
+}
+
+function login(){
+
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
+
+  if(!email || !password){
+
+    showMessage("Please enter your email and password.");
+
+    return;
+  }
+
+  const user = localStorage.getItem("jeevanVaultUser");
+
+  if(!user){
+
+    showMessage("No account found. Please create an account first.");
+
+    return;
+  }
+
+  const data = JSON.parse(user);
+
+  if(email !== data.email){
+
+    showMessage("Email does not match the demo account.");
+
+    return;
+  }
+
+  localStorage.setItem("jeevanVaultLoggedIn","true");
+
+  showMessage("Login successful! Opening your vault...");
+
+  setTimeout(function(){
+
+    window.location.href="dashboard.html";
+
+  },1000);
+}
+
+function showMessage(text){
+
+  const box = document.getElementById("message");
+
+  box.innerText=text;
+  box.style.display="block";
+}
+
+function hideMessage(){
+
+  document.getElementById("message").style.display="none";
+
+}
+
+</script>
+
+</body>
+</html>
