@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>JeevanVault - Login</title>
 
 <style>
+
 *{
   margin:0;
   padding:0;
@@ -20,11 +24,12 @@ body{
   align-items:center;
   justify-content:center;
   background:#f4f7fb;
+  color:#172033;
 }
 
 .login-box{
   width:92%;
-  max-width:400px;
+  max-width:430px;
   background:white;
   padding:32px 25px;
   border-radius:20px;
@@ -33,41 +38,61 @@ body{
 
 .logo{
   text-align:center;
-  font-size:26px;
+  font-size:28px;
   font-weight:bold;
-  color:#111827;
-  margin-bottom:8px;
+  margin-bottom:7px;
 }
 
 .subtitle{
   text-align:center;
   color:#6b7280;
+  font-size:16px;
   margin-bottom:28px;
 }
 
 label{
   display:block;
-  margin-bottom:7px;
-  font-weight:bold;
   font-size:14px;
+  font-weight:bold;
+  margin:15px 0 7px;
 }
 
-input{
+.input{
   width:100%;
   padding:13px;
   border:1px solid #d1d5db;
   border-radius:9px;
-  margin-bottom:18px;
   font-size:15px;
   outline:none;
 }
 
-input:focus{
+.input:focus{
   border-color:#2563eb;
+}
+
+.password-box{
+  position:relative;
+}
+
+.password-box input{
+  padding-right:85px;
+}
+
+.show-password{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  border:none;
+  background:none;
+  color:#2563eb;
+  font-weight:bold;
+  cursor:pointer;
 }
 
 .login-btn{
   width:100%;
+  margin-top:23px;
   padding:14px;
   border:none;
   border-radius:9px;
@@ -86,20 +111,37 @@ input:focus{
   text-align:center;
   margin-top:15px;
   font-size:14px;
-  color:#ef4444;
+  line-height:1.4;
 }
 
 .demo{
-  margin-top:20px;
-  padding:12px;
+  margin-top:18px;
+  padding:14px;
   background:#f3f4f6;
-  border-radius:9px;
+  border-radius:10px;
   text-align:center;
-  font-size:13px;
   color:#6b7280;
+  font-size:13px;
+  line-height:1.4;
 }
+
+.signup{
+  text-align:center;
+  margin-top:22px;
+  color:#6b7280;
+  font-size:14px;
+}
+
+.signup a{
+  color:#2563eb;
+  text-decoration:none;
+  font-weight:bold;
+}
+
 </style>
+
 </head>
+
 
 <body>
 
@@ -113,67 +155,228 @@ input:focus{
     Secure Digital Vault
   </div>
 
+
   <form id="loginForm">
 
     <label>Email</label>
 
     <input
+      class="input"
       type="email"
       id="email"
       placeholder="Enter your email"
       required
     >
 
+
     <label>Password</label>
 
-    <input
-      type="password"
-      id="password"
-      placeholder="Enter your password"
-      required
-    >
+    <div class="password-box">
 
-    <button type="submit" class="login-btn">
+      <input
+        class="input"
+        type="password"
+        id="password"
+        placeholder="Enter your password"
+        required
+      >
+
+      <button
+        type="button"
+        class="show-password"
+        onclick="togglePassword()"
+      >
+        Show
+      </button>
+
+    </div>
+
+
+    <button
+      type="submit"
+      class="login-btn"
+    >
       Login
     </button>
 
-    <div id="message" class="message"></div>
+
+    <div
+      id="message"
+      class="message"
+    ></div>
 
   </form>
 
+
   <div class="demo">
-    Demo Login — कोई भी valid email और password डालकर Login दबाएँ।
+    🔒 Login using the account you created.
   </div>
-<div style="text-align:center; margin-top:20px; font-size:14px; color:#6b7280;">
-  Don't have an account?
-  <a href="signup.html"
-     style="color:#2563eb; text-decoration:none; font-weight:bold;">
-    Create Account
-  </a>
-</div>
+
+
+  <div class="signup">
+
+    Don't have an account?
+
+    <a href="signup.html">
+      Create Account
+    </a>
+
+  </div>
+
 </div>
 
 
 <script>
 
-document.getElementById("loginForm").addEventListener("submit", function(event){
+/* SHOW / HIDE PASSWORD */
+
+function togglePassword(){
+
+  const password =
+    document.getElementById("password");
+
+  const button =
+    document.querySelector(".show-password");
+
+
+  if(password.type === "password"){
+
+    password.type = "text";
+
+    button.textContent = "Hide";
+
+  }else{
+
+    password.type = "password";
+
+    button.textContent = "Show";
+
+  }
+
+}
+
+
+/* LOGIN */
+
+document
+.getElementById("loginForm")
+.addEventListener("submit", function(event){
 
   event.preventDefault();
 
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const message = document.getElementById("message");
 
-  if(email === "" || password === ""){
-    message.textContent = "Please enter email and password.";
+  const email =
+    document
+    .getElementById("email")
+    .value
+    .trim()
+    .toLowerCase();
+
+
+  const password =
+    document
+    .getElementById("password")
+    .value;
+
+
+  const message =
+    document.getElementById("message");
+
+
+  /* GET SAVED ACCOUNT */
+
+  const savedProfile =
+    JSON.parse(
+      localStorage.getItem(
+        "jeevanVaultProfile"
+      ) || "{}"
+    );
+
+
+  const savedEmail =
+    (savedProfile.email || "")
+    .trim()
+    .toLowerCase();
+
+
+  const savedPassword =
+    localStorage.getItem(
+      "jeevanVaultPassword"
+    );
+
+
+  /* CHECK ACCOUNT */
+
+  if(!savedEmail){
+
+    message.style.color =
+      "#ef4444";
+
+    message.textContent =
+      "No account found. Please create an account first.";
+
     return;
+
   }
 
-  // Login successful
-  localStorage.setItem("jeevanVaultUser", email);
 
-  // Open Dashboard
-  window.location.href = "dashboard.html";
+  /* CHECK EMAIL */
+
+  if(email !== savedEmail){
+
+    message.style.color =
+      "#ef4444";
+
+    message.textContent =
+      "Email does not match the registered account.";
+
+    return;
+
+  }
+
+
+  /* CHECK PASSWORD */
+
+  if(password !== savedPassword){
+
+    message.style.color =
+      "#ef4444";
+
+    message.textContent =
+      "Incorrect password. Please try again.";
+
+    return;
+
+  }
+
+
+  /* LOGIN SUCCESS */
+
+  localStorage.setItem(
+    "jeevanVaultLoggedIn",
+    "true"
+  );
+
+
+  localStorage.setItem(
+    "jeevanVaultUser",
+    savedEmail
+  );
+
+
+  message.style.color =
+    "#16a34a";
+
+  message.textContent =
+    "Login successful ✓";
+
+
+  setTimeout(function(){
+
+    window.location.href =
+      "dashboard.html";
+
+  },700);
 
 });
 
