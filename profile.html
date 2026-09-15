@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>JeevanVault - My Profile</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#f4f7fb;
+  color:#172033;
+}
+
+.header{
+  background:#111827;
+  color:white;
+  padding:18px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  font-size:21px;
+  font-weight:bold;
+}
+
+.back{
+  color:white;
+  text-decoration:none;
+  background:#2563eb;
+  padding:9px 14px;
+  border-radius:8px;
+}
+
+.container{
+  max-width:650px;
+  margin:auto;
+  padding:25px 16px;
+}
+
+.title{
+  margin-bottom:22px;
+}
+
+.title h1{
+  font-size:27px;
+  margin-bottom:7px;
+}
+
+.title p{
+  color:#6b7280;
+}
+
+.profile-box{
+  background:white;
+  padding:25px;
+  border-radius:18px;
+  box-shadow:0 5px 20px rgba(0,0,0,.07);
+}
+
+.avatar{
+  width:85px;
+  height:85px;
+  margin:0 auto 20px;
+  border-radius:50%;
+  background:#2563eb;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  font-weight:bold;
+}
+
+label{
+  display:block;
+  font-weight:bold;
+  margin:16px 0 7px;
+}
+
+input,
+textarea{
+  width:100%;
+  padding:13px;
+  border:1px solid #d1d5db;
+  border-radius:9px;
+  font-size:15px;
+  outline:none;
+}
+
+input:focus,
+textarea:focus{
+  border-color:#2563eb;
+}
+
+textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.save-btn{
+  width:100%;
+  margin-top:22px;
+  padding:14px;
+  border:none;
+  border-radius:9px;
+  background:#2563eb;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.message{
+  text-align:center;
+  margin-top:14px;
+  color:#16a34a;
+  font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+  <div class="logo">
+    🔐 JeevanVault
+  </div>
+
+  <a href="dashboard.html" class="back">
+    ← Dashboard
+  </a>
+
+</header>
+
+
+<main class="container">
+
+  <div class="title">
+
+    <h1>👤 My Profile</h1>
+
+    <p>Manage your personal information.</p>
+
+  </div>
+
+
+  <div class="profile-box">
+
+    <div class="avatar" id="avatar">
+      JV
+    </div>
+
+
+    <label>Full Name</label>
+
+    <input
+      type="text"
+      id="name"
+      placeholder="Enter your full name"
+    >
+
+
+    <label>Email</label>
+
+    <input
+      type="email"
+      id="email"
+      placeholder="Enter your email"
+    >
+
+
+    <label>Mobile Number</label>
+
+    <input
+      type="tel"
+      id="mobile"
+      placeholder="Enter your mobile number"
+    >
+
+
+    <label>Address</label>
+
+    <textarea
+      id="address"
+      placeholder="Enter your address"
+    ></textarea>
+
+
+    <button class="save-btn" onclick="saveProfile()">
+      💾 Save Profile
+    </button>
+
+    <div class="message" id="message"></div>
+
+  </div>
+
+</main>
+
+
+<script>
+
+function loadProfile(){
+
+  const profile = JSON.parse(
+    localStorage.getItem("jeevanVaultProfile") || "{}"
+  );
+
+  const loginEmail =
+    localStorage.getItem("jeevanVaultUser") || "";
+
+  document.getElementById("name").value =
+    profile.name || "";
+
+  document.getElementById("email").value =
+    profile.email || loginEmail;
+
+  document.getElementById("mobile").value =
+    profile.mobile || "";
+
+  document.getElementById("address").value =
+    profile.address || "";
+
+  updateAvatar(profile.name || "");
+
+}
+
+
+function saveProfile(){
+
+  const name =
+    document.getElementById("name").value.trim();
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  const mobile =
+    document.getElementById("mobile").value.trim();
+
+  const address =
+    document.getElementById("address").value.trim();
+
+
+  if(name === ""){
+
+    alert("Please enter your name.");
+
+    return;
+
+  }
+
+
+  const profile = {
+
+    name:name,
+
+    email:email,
+
+    mobile:mobile,
+
+    address:address
+
+  };
+
+
+  localStorage.setItem(
+    "jeevanVaultProfile",
+    JSON.stringify(profile)
+  );
+
+
+  updateAvatar(name);
+
+
+  document.getElementById("message").textContent =
+    "Profile saved successfully ✓";
+
+
+  setTimeout(function(){
+
+    document.getElementById("message").textContent = "";
+
+  },3000);
+
+}
+
+
+function updateAvatar(name){
+
+  if(name === ""){
+
+    document.getElementById("avatar").textContent = "JV";
+
+    return;
+
+  }
+
+
+  const words = name.split(" ");
+
+  let initials = words[0].charAt(0).toUpperCase();
+
+  if(words.length > 1){
+
+    initials += words[words.length - 1]
+      .charAt(0)
+      .toUpperCase();
+
+  }
+
+
+  document.getElementById("avatar").textContent =
+    initials;
+
+}
+
+
+loadProfile();
+
+</script>
+
+</body>
+</html>
