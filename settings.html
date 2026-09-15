@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>JeevanVault - Settings</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+
+:root{
+  --bg:#f4f7fb;
+  --card:#ffffff;
+  --text:#172033;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --primary:#2563eb;
+  --danger:#ef4444;
+  --success:#16a34a;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  transition:.2s;
+}
+
+body.dark{
+  --bg:#0f172a;
+  --card:#1e293b;
+  --text:#f8fafc;
+  --muted:#94a3b8;
+  --border:#334155;
+}
+
+/* HEADER */
+
+.header{
+  background:#111827;
+  color:white;
+  padding:17px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+.logo{
+  font-size:21px;
+  font-weight:bold;
+}
+
+.back{
+  color:white;
+  text-decoration:none;
+  background:#2563eb;
+  padding:9px 14px;
+  border-radius:8px;
+}
+
+/* MAIN */
+
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:25px 16px 50px;
+}
+
+.title{
+  margin-bottom:25px;
+}
+
+.title h1{
+  font-size:28px;
+  margin-bottom:7px;
+}
+
+.title p{
+  color:var(--muted);
+}
+
+/* SETTINGS CARD */
+
+.settings-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  overflow:hidden;
+  margin-bottom:18px;
+}
+
+.card-title{
+  padding:19px 20px;
+  border-bottom:1px solid var(--border);
+}
+
+.card-title h2{
+  font-size:18px;
+}
+
+.card-title p{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:5px;
+}
+
+.setting-row{
+  padding:18px 20px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+
+.setting-row:last-child{
+  border-bottom:none;
+}
+
+.setting-info{
+  flex:1;
+}
+
+.setting-info h3{
+  font-size:15px;
+  margin-bottom:5px;
+}
+
+.setting-info p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.4;
+}
+
+/* INPUTS */
+
+.input{
+  width:100%;
+  max-width:350px;
+  padding:11px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:var(--card);
+  color:var(--text);
+  outline:none;
+}
+
+.select{
+  width:170px;
+  padding:10px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:var(--card);
+  color:var(--text);
+}
+
+/* BUTTONS */
+
+.btn{
+  border:none;
+  border-radius:8px;
+  padding:10px 14px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.primary{
+  background:var(--primary);
+  color:white;
+}
+
+.danger{
+  background:var(--danger);
+  color:white;
+}
+
+.secondary{
+  background:#e5e7eb;
+  color:#111827;
+}
+
+body.dark .secondary{
+  background:#334155;
+  color:white;
+}
+
+/* TOGGLE */
+
+.switch{
+  position:relative;
+  width:48px;
+  height:26px;
+  flex-shrink:0;
+}
+
+.switch input{
+  display:none;
+}
+
+.slider{
+  position:absolute;
+  inset:0;
+  background:#cbd5e1;
+  border-radius:30px;
+  cursor:pointer;
+}
+
+.slider:before{
+  content:"";
+  position:absolute;
+  width:20px;
+  height:20px;
+  left:3px;
+  top:3px;
+  background:white;
+  border-radius:50%;
+  transition:.2s;
+}
+
+.switch input:checked + .slider{
+  background:#2563eb;
+}
+
+.switch input:checked + .slider:before{
+  transform:translateX(22px);
+}
+
+/* STATUS */
+
+.status{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.safe{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.info{
+  background:#dbeafe;
+  color:#1e40af;
+}
+
+/* MODAL */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:20;
+}
+
+.modal-box{
+  width:100%;
+  max-width:420px;
+  background:var(--card);
+  color:var(--text);
+  padding:24px;
+  border-radius:16px;
+}
+
+.modal-box h2{
+  margin-bottom:10px;
+}
+
+.modal-box p{
+  color:var(--muted);
+  line-height:1.5;
+  margin-bottom:20px;
+}
+
+.modal-actions{
+  display:flex;
+  gap:10px;
+  justify-content:flex-end;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  bottom:25px;
+  left:50%;
+  transform:translateX(-50%) translateY(100px);
+  background:#111827;
+  color:white;
+  padding:12px 18px;
+  border-radius:9px;
+  opacity:0;
+  transition:.3s;
+  z-index:30;
+}
+
+.toast.show{
+  transform:translateX(-50%) translateY(0);
+  opacity:1;
+}
+
+/* MOBILE */
+
+@media(max-width:650px){
+
+  .setting-row{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .input,
+  .select{
+    max-width:none;
+    width:100%;
+  }
+
+  .setting-row .btn{
+    width:100%;
+  }
+
+  .header{
+    padding:15px;
+  }
+
+  .title h1{
+    font-size:24px;
+  }
+
+}
+</style>
+</head>
+
+
+<body>
+
+<!-- HEADER -->
+
+<header class="header">
+
+  <div class="logo">
+    🔐 JeevanVault
+  </div>
+
+  <a href="dashboard.html" class="back">
+    ← Dashboard
+  </a>
+
+</header>
+
+
+<main class="container">
+
+  <div class="title">
+
+    <h1>⚙️ Settings</h1>
+
+    <p>
+      Manage your JeevanVault account and preferences.
+    </p>
+
+  </div>
+
+
+  <!-- ACCOUNT -->
+
+  <section class="settings-card">
+
+    <div class="card-title">
+
+      <h2>👤 Account</h2>
+
+      <p>Manage your basic account information.</p>
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>Account Name</h3>
+
+        <p>Your name displayed in JeevanVault.</p>
+
+      </div>
+
+      <input
+        class="input"
+        id="accountName"
+        type="text"
+        placeholder="Your name"
+      >
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>Email</h3>
+
+        <p>Email associated with this browser account.</p>
+
+      </div>
+
+      <input
+        class="input"
+        id="accountEmail"
+        type="email"
+        placeholder="Email address"
+      >
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>Mobile Number</h3>
+
+        <p>Your saved contact number.</p>
+
+      </div>
+
+      <input
+        class="input"
+        id="accountMobile"
+        type="tel"
+        placeholder="Mobile number"
+      >
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div></div>
+
+      <button class="btn primary" onclick="saveAccount()">
+        💾 Save Account
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- SECURITY -->
+
+  <section class="settings-card">
+
+    <div class="card-title">
+
+      <h2>🔐 Security</h2>
+
+      <p>Manage your local security preferences.</p>
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>Security Status</h3>
+
+        <p>Current browser-level security status.</p>
+
+      </div>
+
+      <span class="status safe">
+        ● Protected
+      </span>
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>Auto Logout</h3>
+
+        <p>Automatically log out after inactivity.</p>
+
+      </div>
+
+      <label class="switch">
+
+        <input
+          type="checkbox"
+          id="autoLogout"
+          onchange="saveToggle('autoLogout',this.checked)"
+        >
+
+        <span class="slider"></span>
+
+      </label>
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>Login Activity</h3>
+
+        <p>View your current local login session.</p>
+
+      </div>
+
+      <button class="btn secondary" onclick="showLoginActivity()">
+        View
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- NOTIFICATIONS -->
+
+  <section class="settings-card">
+
+    <div class="card-title">
+
+      <h2>🔔 Notifications</h2>
+
+      <p>Choose which reminders you want.</p>
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>Document Reminders</h3>
+
+        <p>Receive reminders about your documents.</p>
+
+      </div>
+
+      <label class="switch">
+
+        <input
+          type="checkbox"
+          id="documentNotifications"
+          onchange="saveToggle('documentNotifications',this.checked)"
+        >
+
+        <span class="slider"></span>
+
+      </label>
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>Security Alerts</h3>
+
+        <p>Show important security notifications.</p>
+
+      </div>
+
+      <label class="switch">
+
+        <input
+          type="checkbox"
+          id="securityNotifications"
+          checked
+          onchange="saveToggle('securityNotifications',this.checked)"
+        >
+
+        <span class="slider"></span>
+
+      </label>
+
+    </div>
+
+  </section>
+
+
+  <!-- APPEARANCE -->
+
+  <section class="settings-card">
+
+    <div class="card-title">
+
+      <h2>🎨 Appearance</h2>
+
+      <p>Customize how JeevanVault looks.</p>
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>Dark Mode</h3>
+
+        <p>Use a darker interface for comfortable viewing.</p>
+
+      </div>
+
+      <label class="switch">
+
+        <input
+          type="checkbox"
+          id="darkMode"
+          onchange="toggleDarkMode(this.checked)"
+        >
+
+        <span class="slider"></span>
+
+      </label>
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>Language</h3>
+
+        <p>Select your preferred interface language.</p>
+
+      </div>
+
+      <select class="select" id="language" onchange="saveLanguage()">
+
+        <option value="English">English</option>
+
+        <option value="Hindi">Hindi</option>
+
+        <option value="Hinglish">Hinglish</option>
+
+      </select>
+
+    </div>
+
+  </section>
+
+
+  <!-- DOCUMENTS -->
+
+  <section class="settings-card">
+
+    <div class="card-title">
+
+      <h2>📁 Documents</h2>
+
+      <p>Manage document-related preferences.</p>
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>Document Count</h3>
+
+        <p>Total documents currently stored in this browser.</p>
+
+      </div>
+
+      <span class="status info" id="documentCount">
+        0 Documents
+      </span>
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>Document Reminders</h3>
+
+        <p>Enable reminders for important documents.</p>
+
+      </div>
+
+      <label class="switch">
+
+        <input
+          type="checkbox"
+          id="documentReminder"
+          onchange="saveToggle('documentReminder',this.checked)"
+        >
+
+        <span class="slider"></span>
+
+      </label>
+
+    </div>
+
+  </section>
+
+
+  <!-- BACKUP -->
+
+  <section class="settings-card">
+
+    <div class="card-title">
+
+      <h2>☁️ Backup & Data</h2>
+
+      <p>Export or remove your locally stored JeevanVault data.</p>
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>Export Data</h3>
+
+        <p>Download your profile and document information as a JSON file.</p>
+
+      </div>
+
+      <button class="btn primary" onclick="exportData()">
+        ⬇️ Export
+      </button>
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>Clear Local Data</h3>
+
+        <p>Delete locally stored JeevanVault data from this browser.</p>
+
+      </div>
+
+      <button class="btn danger" onclick="openClearModal()">
+        🗑️ Clear Data
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- PRIVACY -->
+
+  <section class="settings-card">
+
+    <div class="card-title">
+
+      <h2>🛡️ Privacy</h2>
+
+      <p>Control your local privacy preferences.</p>
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>Local Storage</h3>
+
+        <p>Your current demo data is stored locally in this browser.</p>
+
+      </div>
+
+      <span class="status safe">
+        Local
+      </span>
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>Activity History</h3>
+
+        <p>Store local activity information.</p>
+
+      </div>
+
+      <label class="switch">
+
+        <input
+          type="checkbox"
+          id="activityHistory"
+          checked
+          onchange="saveToggle('activityHistory',this.checked)"
+        >
+
+        <span class="slider"></span>
+
+      </label>
+
+    </div>
+
+  </section>
+
+
+  <!-- HELP -->
+
+  <section class="settings-card">
+
+    <div class="card-title">
+
+      <h2>ℹ️ Help & About</h2>
+
+      <p>Information about JeevanVault.</p>
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>JeevanVault Version</h3>
+
+        <p>Current website version.</p>
+
+      </div>
+
+      <span class="status info">
+        v1.0
+      </span>
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>About JeevanVault</h3>
+
+        <p>A simple digital information management interface.</p>
+
+      </div>
+
+      <button class="btn secondary" onclick="showAbout()">
+        About
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- LOGOUT -->
+
+  <section class="settings-card">
+
+    <div class="setting-row">
+
+      <div class="setting-info">
+
+        <h3>🚪 Logout</h3>
+
+        <p>Return to the JeevanVault login page.</p>
+
+      </div>
+
+      <button class="btn danger" onclick="logout()">
+        Logout
+      </button>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- CLEAR MODAL -->
+
+<div class="modal" id="clearModal">
+
+  <div class="modal-box">
+
+    <h2>Clear Local Data?</h2>
+
+    <p>
+      This will remove your locally stored profile,
+      documents and JeevanVault settings from this browser.
+      This action cannot be undone.
+    </p>
+
+    <div class="modal-actions">
+
+      <button class="btn secondary" onclick="closeClearModal()">
+        Cancel
+      </button>
+
+      <button class="btn danger" onclick="clearData()">
+        Clear Everything
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* TOAST */
+
+function showToast(message){
+
+  const toast = document.getElementById("toast");
+
+  toast.textContent = message;
+
+  toast.classList.add("show");
+
+  setTimeout(function(){
+
+    toast.classList.remove("show");
+
+  },2500);
+
+}
+
+
+/* ACCOUNT */
+
+function loadAccount(){
+
+  const profile = JSON.parse(
+    localStorage.getItem("jeevanVaultProfile") || "{}"
+  );
+
+  const loginEmail =
+    localStorage.getItem("jeevanVaultUser") || "";
+
+  document.getElementById("accountName").value =
+    profile.name || "";
+
+  document.getElementById("accountEmail").value =
+    profile.email || loginEmail;
+
+  document.getElementById("accountMobile").value =
+    profile.mobile || "";
+
+}
+
+
+function saveAccount(){
+
+  const profile =
+    JSON.parse(
+      localStorage.getItem("jeevanVaultProfile") || "{}"
+    );
+
+  profile.name =
+    document.getElementById("accountName").value.trim();
+
+  profile.email =
+    document.getElementById("accountEmail").value.trim();
+
+  profile.mobile =
+    document.getElementById("accountMobile").value.trim();
+
+
+  localStorage.setItem(
+    "jeevanVaultProfile",
+    JSON.stringify(profile)
+  );
+
+
+  if(profile.email){
+
+    localStorage.setItem(
+      "jeevanVaultUser",
+      profile.email
+    );
+
+  }
+
+
+  showToast("Account information saved ✓");
+
+}
+
+
+/* TOGGLES */
+
+function saveToggle(key,value){
+
+  localStorage.setItem(
+    "jeevanVault_" + key,
+    value
+  );
+
+  showToast("Setting updated ✓");
+
+}
+
+
+function loadToggle(id,key,defaultValue=false){
+
+  const saved =
+    localStorage.getItem("jeevanVault_" + key);
+
+  const value =
+    saved === null
+      ? defaultValue
+      : saved === "true";
+
+  document.getElementById(id).checked = value;
+
+}
+
+
+/* DARK MODE */
+
+function toggleDarkMode(enabled){
+
+  document.body.classList.toggle(
+    "dark",
+    enabled
+  );
+
+  localStorage.setItem(
+    "jeevanVault_darkMode",
+    enabled
+  );
+
+}
+
+
+function loadDarkMode(){
+
+  const enabled =
+    localStorage.getItem("jeevanVault_darkMode")
+    === "true";
+
+  document.getElementById("darkMode").checked =
+    enabled;
+
+  document.body.classList.toggle(
+    "dark",
+    enabled
+  );
+
+}
+
+
+/* LANGUAGE */
+
+function saveLanguage(){
+
+  const language =
+    document.getElementById("language").value;
+
+  localStorage.setItem(
+    "jeevanVault_language",
+    language
+  );
+
+  showToast("Language preference saved ✓");
+
+}
+
+
+function loadLanguage(){
+
+  const language =
+    localStorage.getItem("jeevanVault_language");
+
+  if(language){
+
+    document.getElementById("language").value =
+      language;
+
+  }
+
+}
+
+
+/* DOCUMENT COUNT */
+
+function updateDocumentCount(){
+
+  const documents =
+    JSON.parse(
+      localStorage.getItem(
+        "jeevanVaultDocuments"
+      ) || "[]"
+    );
+
+  const count =
+    documents.length;
+
+  document.getElementById(
+    "documentCount"
+  ).textContent =
+    count + (count === 1 ? " Document" : " Documents");
+
+}
+
+
+/* LOGIN ACTIVITY */
+
+function showLoginActivity(){
+
+  const email =
+    localStorage.getItem("jeevanVaultUser");
+
+  if(email){
+
+    alert(
+      "Current local session\n\nEmail: " +
+      email +
+      "\n\nStatus: Active"
+    );
+
+  }else{
+
+    alert(
+      "No active local login session found."
+    );
+
+  }
+
+}
+
+
+/* EXPORT DATA */
+
+function exportData(){
+
+  const data = {
+
+    profile:
+      JSON.parse(
+        localStorage.getItem(
+          "jeevanVaultProfile"
+        ) || "{}"
+      ),
+
+    documents:
+      JSON.parse(
+        localStorage.getItem(
+          "jeevanVaultDocuments"
+        ) || "[]"
+      ),
+
+    settings: {
+
+      darkMode:
+        localStorage.getItem(
+          "jeevanVault_darkMode"
+        ),
+
+      language:
+        localStorage.getItem(
+          "jeevanVault_language"
+        ),
+
+      documentNotifications:
+        localStorage.getItem(
+          "jeevanVault_documentNotifications"
+        ),
+
+      securityNotifications:
+        localStorage.getItem(
+          "jeevanVault_securityNotifications"
+        )
+
+    }
+
+  };
+
+
+  const blob =
+    new Blob(
+      [JSON.stringify(data,null,2)],
+      {type:"application/json"}
+    );
+
+
+  const url =
+    URL.createObjectURL(blob);
+
+
+  const link =
+    document.createElement("a");
+
+  link.href = url;
+
+  link.download =
+    "JeevanVault-Backup.json";
+
+  link.click();
+
+
+  URL.revokeObjectURL(url);
+
+  showToast("Backup exported ✓");
+
+}
+
+
+/* CLEAR DATA */
+
+function openClearModal(){
+
+  document.getElementById(
+    "clearModal"
+  ).style.display = "flex";
+
+}
+
+
+function closeClearModal(){
+
+  document.getElementById(
+    "clearModal"
+  ).style.display = "none";
+
+}
+
+
+function clearData(){
+
+  localStorage.clear();
+
+  closeClearModal();
+
+  showToast("Local data cleared");
+
+  setTimeout(function(){
+
+    window.location.href =
+      "index.html";
+
+  },1000);
+
+}
+
+
+/* ABOUT */
+
+function showAbout(){
+
+  alert(
+    "JeevanVault\n\n" +
+    "Version 1.0\n\n" +
+    "A digital information management interface."
+  );
+
+}
+
+
+/* LOGOUT */
+
+function logout(){
+
+  localStorage.removeItem(
+    "jeevanVaultUser"
+  );
+
+  window.location.href =
+    "login.html";
+
+}
+
+
+/* LOAD EVERYTHING */
+
+loadAccount();
+
+loadDarkMode();
+
+loadLanguage();
+
+loadToggle(
+  "autoLogout",
+  "autoLogout"
+);
+
+loadToggle(
+  "documentNotifications",
+  "documentNotifications"
+);
+
+loadToggle(
+  "securityNotifications",
+  "securityNotifications",
+  true
+);
+
+loadToggle(
+  "documentReminder",
+  "documentReminder"
+);
+
+loadToggle(
+  "activityHistory",
+  "activityHistory",
+  true
+);
+
+updateDocumentCount();
+
+</script>
+
+</body>
+</html>
