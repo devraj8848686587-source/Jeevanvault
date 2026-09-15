@@ -3,142 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JeevanVault — Your Digital Life, Organized.</title>
-<meta name="description" content="JeevanVault helps families, students and small businesses organize their important digital information.">
+
+<title>JeevanVault</title>
+
 <style>
-:root{--bg:#07111f;--card:#0d1b2e;--text:#f5f7fb;--muted:#9caec4;--line:#20334b;--accent:#67e8f9;--accent2:#818cf8}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:linear-gradient(180deg,#06101d,#09172a 55%,#06101d);color:var(--text);line-height:1.6}
-a{text-decoration:none;color:inherit}
-.container{width:min(1120px,92%);margin:auto}
-nav{position:sticky;top:0;z-index:20;background:rgba(6,16,29,.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.07)}
-.nav{height:70px;display:flex;align-items:center;justify-content:space-between}
-.logo{font-size:1.35rem;font-weight:800;letter-spacing:-.5px}.logo span{color:var(--accent)}
-.navlinks{display:flex;gap:24px;color:#c7d2e3;font-size:.95rem}
-.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 19px;border-radius:12px;font-weight:700;border:1px solid var(--line);transition:.2s}
-.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#06101d;border:0}
-.btn:hover{transform:translateY(-2px)}
-.hero{padding:100px 0 75px;text-align:center}
-.badge{display:inline-block;padding:7px 12px;border:1px solid #27415e;border-radius:999px;color:#bdeff7;background:#0a1d2d;margin-bottom:20px;font-size:.85rem}
-h1{font-size:clamp(2.6rem,7vw,5.2rem);line-height:1.02;letter-spacing:-3px;max-width:850px;margin:auto}
-.gradient{background:linear-gradient(90deg,#fff,#67e8f9,#a5b4fc);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p{max-width:680px;margin:24px auto;color:var(--muted);font-size:1.08rem}
-.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}
-section{padding:78px 0}
-.section-title{text-align:center;max-width:700px;margin:0 auto 40px}
-.section-title h2{font-size:2.25rem;letter-spacing:-1px}.section-title p{color:var(--muted);margin-top:10px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.card{background:linear-gradient(180deg,rgba(17,34,56,.9),rgba(10,25,43,.9));border:1px solid var(--line);border-radius:20px;padding:26px;box-shadow:0 15px 45px rgba(0,0,0,.15)}
-.icon{font-size:2rem;margin-bottom:12px}.card h3{margin-bottom:8px}.card p{color:var(--muted);font-size:.95rem}
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.step{text-align:center;padding:24px 12px}.num{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;margin:0 auto 12px;background:#132b45;color:var(--accent);font-weight:800}
-.pricing{align-items:stretch}.price{position:relative}.price.featured{border-color:#4f91a5;transform:translateY(-7px)}
-.popular{position:absolute;right:18px;top:18px;font-size:.72rem;padding:5px 9px;border-radius:999px;background:#173b4b;color:#9ef3ff}
-.price h3{font-size:1.25rem}.amount{font-size:2.3rem;font-weight:800;margin:12px 0}.amount small{font-size:.9rem;color:var(--muted);font-weight:500}
-ul{list-style:none;margin:20px 0}li{margin:10px 0;color:#c8d4e4}li::before{content:"✓";color:var(--accent);font-weight:800;margin-right:8px}
-.cta{border:1px solid #27415e;border-radius:28px;padding:48px;text-align:center;background:radial-gradient(circle at 50% 0,#14324a,transparent 65%)}
-.cta p{color:var(--muted);margin:12px auto 22px;max-width:620px}
-form{max-width:600px;margin:24px auto 0;display:grid;gap:12px;text-align:left}
-input,select,textarea{width:100%;padding:13px 14px;border-radius:11px;border:1px solid var(--line);background:#071524;color:white;outline:none}
-textarea{min-height:110px;resize:vertical}
-footer{padding:35px 0;border-top:1px solid rgba(255,255,255,.07);color:var(--muted);font-size:.9rem}
-.footer{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
-@media(max-width:800px){.navlinks{display:none}.grid{grid-template-columns:1fr}.steps{grid-template-columns:1fr 1fr}.hero{padding-top:70px}h1{letter-spacing:-2px}.price.featured{transform:none}}
-@media(max-width:500px){.steps{grid-template-columns:1fr}.cta{padding:30px 20px}}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#111827,#2563eb);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.container{
+  width:92%;
+  max-width:600px;
+}
+
+.logo{
+  font-size:42px;
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+h1{
+  font-size:38px;
+  margin-bottom:15px;
+}
+
+p{
+  font-size:17px;
+  line-height:1.6;
+  color:#dbeafe;
+  margin-bottom:30px;
+}
+
+.btn{
+  display:inline-block;
+  background:white;
+  color:#1d4ed8;
+  padding:15px 32px;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:bold;
+  font-size:17px;
+}
+
+.btn:hover{
+  transform:scale(1.03);
+}
+
+.note{
+  margin-top:25px;
+  font-size:13px;
+  color:#bfdbfe;
+}
 </style>
 </head>
+
 <body>
-<nav>
-  <div class="container nav">
-    <a href="#" class="logo">Jeevan<span>Vault</span></a>
-    <div class="navlinks"><a href="#services">Services</a><a href="#how">How it works</a><a href="#pricing">Pricing</a><a href="#privacy">Privacy</a></div>
-    <a class="btn primary" href="https://wa.me/917079931371?text=Hi%20JeevanVault%2C%20I%20want%20to%20know%20more." target="_blank">WhatsApp</a>
-  </div>
-</nav>
 
-<header class="hero">
-  <div class="container">
-    <span class="badge">Digital Organization for Everyone</span>
-    <h1>Your Digital Life.<br><span class="gradient">Organized.</span></h1>
-    <p>Important information gets scattered across phones, drives and apps. JeevanVault helps families, students and small businesses build a simple, organized digital system.</p>
-    <div class="actions">
-      <a class="btn primary" href="#get-started">Get Started →</a>
-      <a class="btn" href="#services">Explore Services</a>
-    </div>
-  </div>
-</header>
-
-<section id="services">
 <div class="container">
-  <div class="section-title"><h2>One simple system. Many needs.</h2><p>Choose the service that fits your digital life.</p></div>
-  <div class="grid">
-    <div class="card"><div class="icon">👨‍👩‍👧</div><h3>Family Digital Organization</h3><p>Organize important family information, photos, records and recovery instructions into a clear system.</p></div>
-    <div class="card"><div class="icon">🎓</div><h3>Student Organization</h3><p>Keep certificates, projects, IDs, results and academic files neatly organized and backed up.</p></div>
-    <div class="card"><div class="icon">🏪</div><h3>Small Business Setup</h3><p>Create a practical structure for business files, records, contacts and important operational information.</p></div>
+
+  <div class="logo">🔐 JeevanVault</div>
+
+  <h1>Your Digital Life, Securely Stored</h1>
+
+  <p>
+    JeevanVault helps you manage your important digital
+    information securely and conveniently in one place.
+  </p>
+
+  <!-- GET STARTED -->
+  <a href="login.html" class="btn">
+    Get Started →
+  </a>
+
+  <div class="note">
+    Secure • Simple • Private
   </div>
+
 </div>
-</section>
 
-<section id="how">
-<div class="container">
-  <div class="section-title"><h2>How JeevanVault works</h2><p>Simple setup. No complicated app required.</p></div>
-  <div class="steps">
-    <div class="step"><div class="num">1</div><h3>Choose</h3><p>Pick a plan.</p></div>
-    <div class="step"><div class="num">2</div><h3>Setup</h3><p>We understand your needs.</p></div>
-    <div class="step"><div class="num">3</div><h3>Organize</h3><p>Build your digital structure.</p></div>
-    <div class="step"><div class="num">4</div><h3>Maintain</h3><p>Keep it updated over time.</p></div>
-  </div>
-</div>
-</section>
-
-<section id="pricing">
-<div class="container">
-  <div class="section-title"><h2>Simple pricing</h2><p>Start small. Upgrade when you need more.</p></div>
-  <div class="grid pricing">
-    <div class="card price"><h3>Starter</h3><div class="amount">₹499 <small>/ setup</small></div><ul><li>Digital folder structure</li><li>Organization checklist</li><li>Basic backup guidance</li></ul><a class="btn" href="#get-started">Choose Starter</a></div>
-    <div class="card price featured"><span class="popular">POPULAR</span><h3>Family</h3><div class="amount">₹1,499 <small>/ setup</small></div><ul><li>Complete family structure</li><li>Backup setup guidance</li><li>Recovery instructions</li><li>Update checklist</li></ul><a class="btn primary" href="#get-started">Choose Family</a></div>
-    <div class="card price"><h3>Pro</h3><div class="amount">₹2,999 <small>/ year</small></div><ul><li>Complete setup</li><li>Annual review</li><li>Backup check</li><li>Update reminders</li></ul><a class="btn" href="#get-started">Choose Pro</a></div>
-  </div>
-</div>
-</section>
-
-<section id="privacy">
-<div class="container">
-  <div class="card">
-    <h2>🔐 Privacy first</h2>
-    <p style="color:var(--muted);margin-top:10px">JeevanVault is designed to help you organize your digital life—not collect your secrets. Never share passwords, banking PINs, OTPs or unnecessary credentials with us. Wherever possible, you keep control of your accounts and files.</p>
-  </div>
-</div>
-</section>
-
-<section id="get-started">
-<div class="container">
-  <div class="cta">
-    <h2>Ready to organize your digital life?</h2>
-    <p>Tell us what you need. We'll help you choose the right setup.</p>
-    <form id="leadForm">
-      <input id="name" placeholder="Your name" required>
-      <select id="need" required><option value="">What do you need?</option><option>Family Digital Organization</option><option>Student Organization</option><option>Small Business Setup</option><option>Not sure yet</option></select>
-      <textarea id="message" placeholder="Tell us briefly what you want to organize"></textarea>
-      <button class="btn primary" type="submit">Send on WhatsApp</button>
-    </form>
-  </div>
-</div>
-</section>
-
-<footer>
-<div class="container footer"><div>© 2026 JeevanVault. Built for a more organized digital life.</div><div>WhatsApp: +91 70799 31371</div></div>
-</footer>
-
-<script>
-document.getElementById('leadForm').addEventListener('submit',function(e){
- e.preventDefault();
- const name=document.getElementById('name').value.trim();
- const need=document.getElementById('need').value;
- const msg=document.getElementById('message').value.trim();
- const text=`Hi JeevanVault!%0A%0AName: ${encodeURIComponent(name)}%0ANeed: ${encodeURIComponent(need)}%0AMessage: ${encodeURIComponent(msg)}`;
- window.open(`https://wa.me/917079931371?text=${text}`,'_blank');
-});
-</script>
 </body>
 </html>
