@@ -14,15 +14,25 @@
   font-family:Arial,sans-serif;
 }
 
+:root{
+  --bg:#f4f7fb;
+  --card:#fff;
+  --text:#172033;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --primary:#2563eb;
+  --danger:#ef4444;
+}
+
 body{
-  background:#f4f7fb;
-  color:#172033;
+  background:var(--bg);
+  color:var(--text);
 }
 
 .header{
   background:#111827;
   color:white;
-  padding:18px 20px;
+  padding:17px 20px;
   display:flex;
   justify-content:space-between;
   align-items:center;
@@ -42,111 +52,303 @@ body{
 }
 
 .container{
-  max-width:900px;
+  max-width:950px;
   margin:auto;
-  padding:25px 16px;
+  padding:25px 16px 50px;
 }
 
-h1{
-  margin-bottom:7px;
-}
-
-.subtitle{
-  color:#6b7280;
-  margin-bottom:25px;
-}
-
-.form-box,
-.documents-box{
-  background:white;
-  padding:22px;
-  border-radius:16px;
-  box-shadow:0 5px 20px rgba(0,0,0,.07);
+.title{
   margin-bottom:22px;
 }
 
-.form-box h2,
-.documents-box h2{
+.title h1{
+  font-size:28px;
+  margin-bottom:7px;
+}
+
+.title p{
+  color:var(--muted);
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.stat{
+  background:var(--card);
+  padding:18px;
+  border-radius:14px;
+  border:1px solid var(--border);
+}
+
+.stat strong{
+  display:block;
+  font-size:25px;
+  margin-bottom:5px;
+}
+
+.stat span{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.upload-box{
+  background:var(--card);
+  border:2px dashed #cbd5e1;
+  border-radius:16px;
+  padding:25px;
+  margin-bottom:20px;
+  text-align:center;
+}
+
+.upload-box h2{
+  margin-bottom:8px;
+}
+
+.upload-box p{
+  color:var(--muted);
+  font-size:14px;
   margin-bottom:18px;
+}
+
+.file-input{
+  display:none;
+}
+
+.upload-btn{
+  display:inline-block;
+  background:var(--primary);
+  color:white;
+  padding:12px 18px;
+  border-radius:9px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.form-box{
+  display:none;
+  background:var(--card);
+  padding:20px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  margin-bottom:20px;
+}
+
+.form-box h2{
+  margin-bottom:15px;
 }
 
 label{
   display:block;
+  font-size:14px;
   font-weight:bold;
   margin:13px 0 7px;
 }
 
-input,
-select,
-textarea{
+.input,
+.select{
   width:100%;
   padding:12px;
-  border:1px solid #d1d5db;
-  border-radius:9px;
-  font-size:15px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:white;
+  color:var(--text);
   outline:none;
 }
 
-textarea{
-  min-height:90px;
-  resize:vertical;
-}
-
-button{
+.save-btn{
+  margin-top:18px;
+  width:100%;
+  padding:13px;
   border:none;
+  border-radius:9px;
+  background:var(--primary);
+  color:white;
+  font-weight:bold;
   cursor:pointer;
 }
 
-.add-btn{
+.cancel-btn{
+  margin-top:10px;
   width:100%;
-  margin-top:18px;
-  padding:13px;
-  background:#2563eb;
-  color:white;
+  padding:11px;
+  border:none;
   border-radius:9px;
-  font-size:16px;
-  font-weight:bold;
+  background:#e5e7eb;
+  cursor:pointer;
+}
+
+.toolbar{
+  display:flex;
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.search{
+  flex:1;
+}
+
+.category-filter{
+  width:180px;
+}
+
+.documents{
+  display:grid;
+  gap:14px;
 }
 
 .document{
-  border:1px solid #e5e7eb;
-  border-radius:12px;
-  padding:16px;
-  margin-top:14px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:18px;
 }
 
-.document h3{
-  margin-bottom:7px;
+.doc-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
 }
 
-.category{
-  display:inline-block;
-  background:#eef2ff;
-  color:#3730a3;
-  padding:5px 9px;
-  border-radius:6px;
-  font-size:12px;
-  margin-bottom:10px;
+.doc-icon{
+  font-size:30px;
 }
 
-.details{
-  color:#6b7280;
-  font-size:14px;
-  margin-bottom:12px;
-  white-space:pre-wrap;
+.doc-name{
+  font-size:17px;
+  font-weight:bold;
+  margin-bottom:5px;
 }
 
-.delete-btn{
-  background:#ef4444;
-  color:white;
-  padding:8px 12px;
-  border-radius:7px;
+.doc-meta{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+}
+
+.important{
+  color:#f59e0b;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.doc-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:15px;
+}
+
+.btn{
+  border:none;
+  padding:9px 12px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.preview{
+  background:#dbeafe;
+  color:#1e40af;
+}
+
+.download{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.delete{
+  background:#fee2e2;
+  color:#991b1b;
 }
 
 .empty{
+  background:var(--card);
+  border-radius:15px;
+  padding:35px;
   text-align:center;
-  color:#6b7280;
-  padding:20px 0;
+  color:var(--muted);
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+  z-index:50;
+}
+
+.modal-box{
+  width:100%;
+  max-width:800px;
+  height:90vh;
+  background:white;
+  border-radius:15px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+.modal-header{
+  padding:14px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #ddd;
+}
+
+.close{
+  border:none;
+  background:#fee2e2;
+  color:#991b1b;
+  padding:8px 12px;
+  border-radius:7px;
+  cursor:pointer;
+}
+
+.preview-content{
+  flex:1;
+  overflow:auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+}
+
+.preview-content img{
+  max-width:100%;
+  max-height:100%;
+}
+
+.preview-content iframe{
+  width:100%;
+  height:100%;
+  border:none;
+}
+
+@media(max-width:650px){
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .toolbar{
+    flex-direction:column;
+  }
+
+  .category-filter{
+    width:100%;
+  }
+
+  .header{
+    padding:15px;
+  }
 }
 </style>
 </head>
@@ -155,7 +357,9 @@ button{
 
 <header class="header">
 
-  <div class="logo">🔐 JeevanVault</div>
+  <div class="logo">
+    🔐 JeevanVault
+  </div>
 
   <a href="dashboard.html" class="back">
     ← Dashboard
@@ -166,107 +370,309 @@ button{
 
 <main class="container">
 
-  <h1>📁 My Documents</h1>
+  <div class="title">
 
-  <p class="subtitle">
-    Add and manage your important documents.
-  </p>
+    <h1>📁 My Documents</h1>
+
+    <p>
+      Upload, organize and manage your documents.
+    </p>
+
+  </div>
 
 
-  <!-- ADD DOCUMENT -->
+  <div class="stats">
 
-  <div class="form-box">
+    <div class="stat">
+      <strong id="totalCount">0</strong>
+      <span>Total Documents</span>
+    </div>
 
-    <h2>Add Document</h2>
+    <div class="stat">
+      <strong id="importantCount">0</strong>
+      <span>Important</span>
+    </div>
+
+    <div class="stat">
+      <strong id="categoryCount">0</strong>
+      <span>Categories</span>
+    </div>
+
+  </div>
+
+
+  <div class="upload-box">
+
+    <h2>📤 Upload Document</h2>
+
+    <p>
+      Select a PDF, JPG, JPEG or PNG file.
+    </p>
+
+    <label class="upload-btn">
+
+      Choose File
+
+      <input
+        type="file"
+        id="fileInput"
+        class="file-input"
+        accept=".pdf,.jpg,.jpeg,.png"
+        onchange="fileSelected()"
+      >
+
+    </label>
+
+  </div>
+
+
+  <div class="form-box" id="formBox">
+
+    <h2>Document Details</h2>
 
     <label>Document Name</label>
 
     <input
-      type="text"
+      class="input"
       id="docName"
+      type="text"
       placeholder="Example: Aadhaar Card"
     >
 
 
     <label>Category</label>
 
-    <select id="docCategory">
+    <select class="select" id="docCategory">
 
-      <option value="Identity">Identity</option>
-
+      <option value="Aadhaar">Aadhaar</option>
+      <option value="PAN">PAN</option>
       <option value="Education">Education</option>
-
-      <option value="Banking">Banking</option>
-
-      <option value="Certificate">Certificate</option>
-
+      <option value="Bank">Bank</option>
+      <option value="Insurance">Insurance</option>
+      <option value="Identity">Identity</option>
+      <option value="Medical">Medical</option>
       <option value="Other">Other</option>
 
     </select>
 
 
-    <label>Details</label>
+    <label>Expiry Date (optional)</label>
 
-    <textarea
-      id="docDetails"
-      placeholder="Enter document details..."
-    ></textarea>
+    <input
+      class="input"
+      id="expiryDate"
+      type="date"
+    >
 
 
-    <button class="add-btn" onclick="addDocument()">
-      + Add Document
+    <label>
+
+      <input
+        type="checkbox"
+        id="important"
+      >
+
+      ⭐ Mark as Important
+
+    </label>
+
+
+    <button
+      class="save-btn"
+      onclick="saveDocument()"
+    >
+      💾 Save Document
+    </button>
+
+
+    <button
+      class="cancel-btn"
+      onclick="cancelUpload()"
+    >
+      Cancel
     </button>
 
   </div>
 
 
-  <!-- DOCUMENT LIST -->
+  <div class="toolbar">
 
-  <div class="documents-box">
+    <input
+      class="input search"
+      id="search"
+      type="search"
+      placeholder="🔍 Search documents..."
+      oninput="renderDocuments()"
+    >
 
-    <h2>Saved Documents</h2>
 
-    <div id="documentList"></div>
+    <select
+      class="select category-filter"
+      id="categoryFilter"
+      onchange="renderDocuments()"
+    >
+
+      <option value="All">All Categories</option>
+      <option value="Aadhaar">Aadhaar</option>
+      <option value="PAN">PAN</option>
+      <option value="Education">Education</option>
+      <option value="Bank">Bank</option>
+      <option value="Insurance">Insurance</option>
+      <option value="Identity">Identity</option>
+      <option value="Medical">Medical</option>
+      <option value="Other">Other</option>
+
+    </select>
 
   </div>
+
+
+  <div
+    class="documents"
+    id="documents"
+  ></div>
 
 </main>
 
 
+<!-- PREVIEW MODAL -->
+
+<div
+  class="modal"
+  id="previewModal"
+>
+
+  <div class="modal-box">
+
+    <div class="modal-header">
+
+      <strong id="previewTitle">
+        Document Preview
+      </strong>
+
+      <button
+        class="close"
+        onclick="closePreview()"
+      >
+        ✕ Close
+      </button>
+
+    </div>
+
+    <div
+      class="preview-content"
+      id="previewContent"
+    ></div>
+
+  </div>
+
+</div>
+
+
 <script>
+
+/* STORAGE KEY */
+
+const STORAGE_KEY =
+  "jeevanVaultDocuments";
+
+
+/* GET DOCUMENTS */
 
 function getDocuments(){
 
   return JSON.parse(
-    localStorage.getItem("jeevanVaultDocuments") || "[]"
+    localStorage.getItem(STORAGE_KEY) || "[]"
   );
 
 }
 
 
-function saveDocuments(documents){
+/* SAVE DOCUMENTS */
+
+function setDocuments(documents){
 
   localStorage.setItem(
-    "jeevanVaultDocuments",
+    STORAGE_KEY,
     JSON.stringify(documents)
   );
 
 }
 
 
-function addDocument(){
+/* FILE SELECTED */
+
+function fileSelected(){
+
+  const input =
+    document.getElementById("fileInput");
+
+  if(!input.files.length){
+
+    return;
+
+  }
+
+  const file =
+    input.files[0];
+
+
+  document.getElementById("docName").value =
+    file.name
+    .replace(/\.[^/.]+$/,"");
+
+
+  document.getElementById("formBox")
+    .style.display = "block";
+
+}
+
+
+/* CANCEL */
+
+function cancelUpload(){
+
+  document.getElementById("fileInput").value = "";
+
+  document.getElementById("docName").value = "";
+
+  document.getElementById("expiryDate").value = "";
+
+  document.getElementById("important").checked = false;
+
+  document.getElementById("formBox")
+    .style.display = "none";
+
+}
+
+
+/* SAVE DOCUMENT */
+
+function saveDocument(){
+
+  const input =
+    document.getElementById("fileInput");
+
+
+  if(!input.files.length){
+
+    alert("Please choose a file first.");
+
+    return;
+
+  }
+
+
+  const file =
+    input.files[0];
+
 
   const name =
-    document.getElementById("docName").value.trim();
-
-  const category =
-    document.getElementById("docCategory").value;
-
-  const details =
-    document.getElementById("docDetails").value.trim();
+    document.getElementById("docName")
+    .value.trim();
 
 
-  if(name === ""){
+  if(!name){
 
     alert("Please enter document name.");
 
@@ -275,108 +681,500 @@ function addDocument(){
   }
 
 
-  const documents = getDocuments();
+  /*
+    Browser storage has limited space.
+    We convert the selected file to Base64.
+  */
+
+  const reader =
+    new FileReader();
 
 
-  documents.push({
+  reader.onload = function(event){
 
-    id: Date.now(),
-
-    name: name,
-
-    category: category,
-
-    details: details
-
-  });
+    const documents =
+      getDocuments();
 
 
-  saveDocuments(documents);
+    const documentData = {
+
+      id:Date.now(),
+
+      name:name,
+
+      category:
+        document.getElementById(
+          "docCategory"
+        ).value,
+
+      expiry:
+        document.getElementById(
+          "expiryDate"
+        ).value,
+
+      important:
+        document.getElementById(
+          "important"
+        ).checked,
+
+      fileName:file.name,
+
+      fileType:file.type,
+
+      fileData:event.target.result,
+
+      createdAt:
+        new Date().toISOString()
+
+    };
 
 
-  document.getElementById("docName").value = "";
+    documents.push(documentData);
 
-  document.getElementById("docDetails").value = "";
+    setDocuments(documents);
 
 
-  displayDocuments();
+    cancelUpload();
+
+    renderDocuments();
+
+    updateStats();
+
+
+    alert(
+      "Document saved successfully ✓"
+    );
+
+  };
+
+
+  reader.readAsDataURL(file);
 
 }
 
 
-function deleteDocument(id){
+/* RENDER */
 
-  const documents = getDocuments().filter(
-    document => document.id !== id
-  );
+function renderDocuments(){
 
-
-  saveDocuments(documents);
-
-  displayDocuments();
-
-}
+  const container =
+    document.getElementById("documents");
 
 
-function displayDocuments(){
+  const search =
+    document.getElementById("search")
+    .value
+    .toLowerCase()
+    .trim();
 
-  const list =
-    document.getElementById("documentList");
 
-  const documents = getDocuments();
+  const category =
+    document.getElementById(
+      "categoryFilter"
+    ).value;
 
 
-  if(documents.length === 0){
+  const documents =
+    getDocuments();
 
-    list.innerHTML =
-      '<div class="empty">No documents added yet.</div>';
+
+  const filtered =
+    documents.filter(function(doc){
+
+      const matchesSearch =
+        doc.name
+          .toLowerCase()
+          .includes(search) ||
+        doc.fileName
+          .toLowerCase()
+          .includes(search);
+
+
+      const matchesCategory =
+        category === "All" ||
+        doc.category === category;
+
+
+      return matchesSearch &&
+             matchesCategory;
+
+    });
+
+
+  if(filtered.length === 0){
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        📂
+
+        <h3 style="margin:10px 0;">
+          No documents found
+        </h3>
+
+        <p>
+          Upload a document to see it here.
+        </p>
+
+      </div>
+
+    `;
 
     return;
 
   }
 
 
-  list.innerHTML = documents.map(document => `
+  container.innerHTML =
+    filtered.map(function(doc){
 
-    <div class="document">
+      const expiryText =
+        doc.expiry
+        ? "Expiry: " + doc.expiry
+        : "No expiry date";
 
-      <h3>📄 ${escapeHTML(document.name)}</h3>
 
-      <span class="category">
-        ${escapeHTML(document.category)}
-      </span>
+      const important =
+        doc.important
+        ? `<div class="important">⭐ Important</div>`
+        : "";
 
-      <div class="details">
-        ${escapeHTML(document.details || "No details added.")}
-      </div>
 
-      <button
-        class="delete-btn"
-        onclick="deleteDocument(${document.id})"
-      >
-        Delete
-      </button>
+      return `
 
-    </div>
+        <div class="document">
 
-  `).join("");
+          <div class="doc-top">
+
+            <div>
+
+              <div class="doc-name">
+                ${escapeHTML(doc.name)}
+              </div>
+
+              <div class="doc-meta">
+
+                📂 ${escapeHTML(doc.category)}
+                <br>
+
+                📄 ${escapeHTML(doc.fileName)}
+                <br>
+
+                📅 ${expiryText}
+
+              </div>
+
+              ${important}
+
+            </div>
+
+            <div class="doc-icon">
+              ${getFileIcon(doc.fileType)}
+            </div>
+
+          </div>
+
+
+          <div class="doc-actions">
+
+            <button
+              class="btn preview"
+              onclick="previewDocument(${doc.id})"
+            >
+              👁️ Preview
+            </button>
+
+
+            <button
+              class="btn download"
+              onclick="downloadDocument(${doc.id})"
+            >
+              📥 Download
+            </button>
+
+
+            <button
+              class="btn delete"
+              onclick="deleteDocument(${doc.id})"
+            >
+              🗑️ Delete
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
 
 }
 
+
+/* FILE ICON */
+
+function getFileIcon(type){
+
+  if(type === "application/pdf"){
+
+    return "📕";
+
+  }
+
+  if(type.startsWith("image/")){
+
+    return "🖼️";
+
+  }
+
+  return "📄";
+
+}
+
+
+/* PREVIEW */
+
+function previewDocument(id){
+
+  const documents =
+    getDocuments();
+
+
+  const doc =
+    documents.find(function(item){
+
+      return item.id === id;
+
+    });
+
+
+  if(!doc){
+
+    return;
+
+  }
+
+
+  document.getElementById(
+    "previewTitle"
+  ).textContent =
+    doc.name;
+
+
+  const content =
+    document.getElementById(
+      "previewContent"
+    );
+
+
+  content.innerHTML = "";
+
+
+  if(doc.fileType === "application/pdf"){
+
+    const iframe =
+      document.createElement("iframe");
+
+    iframe.src =
+      doc.fileData;
+
+    content.appendChild(iframe);
+
+  }
+
+  else if(doc.fileType.startsWith("image/")){
+
+    const img =
+      document.createElement("img");
+
+    img.src =
+      doc.fileData;
+
+    img.alt =
+      doc.name;
+
+    content.appendChild(img);
+
+  }
+
+  else{
+
+    content.innerHTML =
+      "<p>Preview is not available for this file type.</p>";
+
+  }
+
+
+  document.getElementById(
+    "previewModal"
+  ).style.display =
+    "flex";
+
+}
+
+
+/* CLOSE PREVIEW */
+
+function closePreview(){
+
+  document.getElementById(
+    "previewModal"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "previewContent"
+  ).innerHTML = "";
+
+}
+
+
+/* DOWNLOAD */
+
+function downloadDocument(id){
+
+  const documents =
+    getDocuments();
+
+
+  const doc =
+    documents.find(function(item){
+
+      return item.id === id;
+
+    });
+
+
+  if(!doc){
+
+    return;
+
+  }
+
+
+  const link =
+    document.createElement("a");
+
+  link.href =
+    doc.fileData;
+
+  link.download =
+    doc.fileName;
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  link.remove();
+
+}
+
+
+/* DELETE */
+
+function deleteDocument(id){
+
+  const confirmDelete =
+    confirm(
+      "Are you sure you want to delete this document?"
+    );
+
+
+  if(!confirmDelete){
+
+    return;
+
+  }
+
+
+  let documents =
+    getDocuments();
+
+
+  documents =
+    documents.filter(function(doc){
+
+      return doc.id !== id;
+
+    });
+
+
+  setDocuments(documents);
+
+  renderDocuments();
+
+  updateStats();
+
+}
+
+
+/* STATISTICS */
+
+function updateStats(){
+
+  const documents =
+    getDocuments();
+
+
+  const important =
+    documents.filter(function(doc){
+
+      return doc.important;
+
+    }).length;
+
+
+  const categories =
+    new Set(
+      documents.map(function(doc){
+
+        return doc.category;
+
+      })
+    );
+
+
+  document.getElementById(
+    "totalCount"
+  ).textContent =
+    documents.length;
+
+
+  document.getElementById(
+    "importantCount"
+  ).textContent =
+    important;
+
+
+  document.getElementById(
+    "categoryCount"
+  ).textContent =
+    categories.size;
+
+}
+
+
+/* ESCAPE HTML */
 
 function escapeHTML(text){
 
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+  return String(text)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
 
-displayDocuments();
+/* INITIAL LOAD */
+
+renderDocuments();
+
+updateStats();
 
 </script>
 
