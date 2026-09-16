@@ -1077,7 +1077,34 @@ function downloadDocument(id){
 
 
 /* DELETE */
+/* IMPORTANT */
 
+function toggleImportant(id){
+
+  let documents =
+    getDocuments();
+
+  documents =
+    documents.map(function(doc){
+
+      if(doc.id === id){
+
+        doc.important =
+          !doc.important;
+
+      }
+
+      return doc;
+
+    });
+
+  setDocuments(documents);
+
+  renderDocuments();
+
+  updateStats();
+
+}
 function deleteDocument(id){
 
   const confirmDelete =
