@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>JeevanVault Dashboard</title>
 
+
 <style>
+
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:Arial, sans-serif;
+  font-family:Arial,sans-serif;
 }
 
 body{
@@ -19,7 +25,9 @@ body{
   color:#172033;
 }
 
+
 /* HEADER */
+
 .header{
   height:70px;
   background:#111827;
@@ -46,7 +54,9 @@ body{
   font-weight:bold;
 }
 
+
 /* MAIN */
+
 .container{
   max-width:1100px;
   margin:auto;
@@ -66,7 +76,9 @@ body{
   color:#6b7280;
 }
 
+
 /* CARDS */
+
 .cards{
   display:grid;
   grid-template-columns:repeat(4,1fr);
@@ -96,7 +108,9 @@ body{
   font-weight:bold;
 }
 
+
 /* QUICK ACTIONS */
+
 .section{
   margin-top:25px;
 }
@@ -113,39 +127,243 @@ body{
 }
 
 .action{
+  display:block;
   background:white;
   padding:20px;
   border-radius:15px;
   text-decoration:none;
   color:#172033;
   box-shadow:0 5px 20px rgba(0,0,0,.06);
+}
 
+.action-icon{
+  font-size:30px;
+  margin-bottom:10px;
+}
+
+.action h3{
+  margin-bottom:7px;
+}
+
+.action p{
+  color:#6b7280;
+  font-size:14px;
+}
+
+
+/* ACTIVITY */
+
+.activity{
+  background:white;
+  border-radius:15px;
+  padding:5px 20px;
+  box-shadow:0 5px 20px rgba(0,0,0,.06);
+}
+
+.activity-item{
+  display:flex;
+  gap:15px;
+  padding:16px 0;
+  border-bottom:1px solid #eee;
+}
+
+.activity-item:last-child{
+  border-bottom:none;
+}
+
+.activity-icon{
+  font-size:22px;
+}
+
+.activity-text span{
+  display:block;
+  color:#6b7280;
+  font-size:14px;
+  margin-top:5px;
+}
+
+
+/* BUTTONS */
+
+.buttons{
+  margin-top:25px;
+  display:flex;
+  gap:10px;
+}
+
+.vault-lock-btn,
+.logout{
+  flex:1;
+  padding:13px;
+  border:none;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.vault-lock-btn{
+  background:#111827;
+  color:white;
+}
+
+.logout{
+  background:#dc2626;
+  color:white;
+}
+
+.vault-lock-btn:active,
+.logout:active{
+  transform:scale(.97);
+}
+
+
+/* SECURITY OVERLAY */
+
+.security-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#111827;
+  z-index:9999;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.security-box{
+  width:100%;
+  max-width:380px;
+  background:white;
+  border-radius:20px;
+  padding:30px 22px;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(0,0,0,.3);
+}
+
+.security-icon{
+  font-size:55px;
+  margin-bottom:12px;
+}
+
+.security-box h2{
+  margin-bottom:8px;
+  color:#172033;
+}
+
+.security-box p{
+  color:#6b7280;
+  font-size:14px;
+  margin-bottom:20px;
+}
+
+.security-pin{
+  width:100%;
+  padding:14px;
+  border:1px solid #d1d5db;
+  border-radius:10px;
+  text-align:center;
+  font-size:20px;
+  letter-spacing:5px;
+  outline:none;
+  margin-bottom:12px;
+}
+
+.security-btn{
+  width:100%;
+  padding:13px;
+  border:none;
+  border-radius:10px;
+  background:#2563eb;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.security-reset{
+  width:100%;
+  padding:11px;
+  border:none;
+  background:#f3f4f6;
+  color:#374151;
+  border-radius:10px;
+  margin-top:10px;
+  cursor:pointer;
+}
+
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+  .cards{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .actions{
+    grid-template-columns:1fr;
+  }
 
   .container{
     padding:20px 14px;
   }
 
-  .welcome h1{
-    font-size:23px;
-  }
-
-  .cards{
-    gap:10px;
-  }
-
-  .card{
-    padding:16px;
-  }
-
-  .number{
-    font-size:22px;
-  }
-
 }
+
 </style>
+
 </head>
 
+
 <body>
+
+
+<!-- 🔐 SECURITY / PIN LOCK -->
+
+<div id="securityOverlay"
+class="security-overlay">
+
+  <div class="security-box">
+
+    <div class="security-icon">
+      🔐
+    </div>
+
+    <h2>
+      JeevanVault Locked
+    </h2>
+
+    <p id="securityMessage">
+      Enter your PIN to access your documents.
+    </p>
+
+    <input
+      type="password"
+      id="securityPin"
+      class="security-pin"
+      inputmode="numeric"
+      maxlength="6"
+      placeholder="Enter PIN"
+    >
+
+    <button
+      class="security-btn"
+      onclick="unlockVault()"
+    >
+      🔓 Unlock
+    </button>
+
+    <button
+      class="security-reset"
+      onclick="setupPIN()"
+    >
+      ⚙️ Set / Change PIN
+    </button>
+
+  </div>
+
+</div>
+
+
 
 <!-- HEADER -->
 
@@ -162,15 +380,19 @@ body{
 </header>
 
 
+
 <!-- MAIN -->
 
 <main class="container">
+
 
   <!-- WELCOME -->
 
   <div class="welcome">
 
-    <h1>Welcome to JeevanVault 👋</h1>
+    <h1>
+      Welcome to JeevanVault 👋
+    </h1>
 
     <p>
       Manage your digital information from one place.
@@ -179,161 +401,505 @@ body{
   </div>
 
 
+
   <!-- DASHBOARD CARDS -->
 
   <div class="cards">
 
+
     <div class="card">
 
-      <div class="icon">📁</div>
+      <div class="icon">
+        📄
+      </div>
 
-      <h3>Documents</h3>
+      <h3>
+        Documents
+      </h3>
 
-      <div class="number">0</div>
+      <div class="number"
+      id="totalCount">
+        0
+      </div>
 
     </div>
 
 
+
     <div class="card">
 
-      <div class="icon">👤</div>
+      <div class="icon">
+        👤
+      </div>
 
-      <h3>Profile</h3>
+      <h3>
+        Profile
+      </h3>
 
-      <div class="number">100%</div>
+      <div class="number">
+        100%
+      </div>
 
     </div>
 
 
+
     <div class="card">
 
-      <div class="icon">🔒</div>
+      <div class="icon">
+        🔐
+      </div>
 
-      <h3>Security</h3>
+      <h3>
+        Security
+      </h3>
 
-      <div class="number">Safe</div>
+      <div class="number">
+        Safe
+      </div>
 
     </div>
 
 
+
     <div class="card">
 
-      <div class="icon">🕒</div>
+      <div class="icon">
+        🕘
+      </div>
 
-      <h3>Activity</h3>
+      <h3>
+        Activity
+      </h3>
 
-      <div class="number">0</div>
+      <div class="number">
+        0
+      </div>
 
     </div>
 
   </div>
 
 
+
   <!-- QUICK ACTIONS -->
 
-  
-<section class="section">
+  <section class="section">
 
-    <h2>Quick Actions</h2>
+    <h2>
+      Quick Actions
+    </h2>
+
 
     <div class="actions">
 
-      <a href="documents.html" class="action">
 
-        <div class="action-icon">📄</div>
+      <a
+        href="documents.html"
+        class="action"
+      >
 
-        <h3>Documents</h3>
+        <div class="action-icon">
+          📄
+        </div>
 
-        <p>View and manage your documents.</p>
+        <h3>
+          Documents
+        </h3>
+
+        <p>
+          View and manage your documents.
+        </p>
+
+      </a>
+
+
+
+      <a
+        href="profile.html"
+        class="action"
+      >
+
+        <div class="action-icon">
+          👤
+        </div>
+
+        <h3>
+          My Profile
+        </h3>
+
+        <p>
+          View your personal information.
+        </p>
 
       </a>
 
 
-      <a href="profile.html" class="action">
 
-        <div class="action-icon">👤</div>
+      <a
+        href="settings.html"
+        class="action"
+      >
 
-        <h3>My Profile</h3>
+        <div class="action-icon">
+          ⚙️
+        </div>
 
-        <p>View your personal information.</p>
+        <h3>
+          Settings
+        </h3>
+
+        <p>
+          Manage your account settings.
+        </p>
 
       </a>
 
-
-      <a href="settings.html" class="action">
-
-        <div class="action-icon">⚙️</div>
-
-        <h3>Settings</h3>
-
-        <p>Manage your account settings.</p>
-
-      </a>
 
     </div>
 
   </section>
+
+
 
   <!-- RECENT ACTIVITY -->
 
   <section class="section">
 
-    <h2>Recent Activity</h2>
+    <h2>
+      Recent Activity
+    </h2>
+
 
     <div class="activity">
 
+
       <div class="activity-item">
 
-        <div class="activity-icon">🔐</div>
+        <div class="activity-icon">
+          📋
+        </div>
 
         <div class="activity-text">
 
-          <b>Account created</b>
+          <b>
+            Account created
+          </b>
 
-          <span>Your JeevanVault account is ready.</span>
+          <span>
+            Your JeevanVault account is ready.
+          </span>
 
         </div>
 
       </div>
 
 
+
       <div class="activity-item">
 
-        <div class="activity-icon">🛡️</div>
+        <div class="activity-icon">
+          🛡️
+        </div>
 
         <div class="activity-text">
 
-          <b>Security check</b>
+          <b>
+            Security check
+          </b>
 
-          <span>Your dashboard is active.</span>
+          <span>
+            Your dashboard is active.
+          </span>
 
         </div>
 
       </div>
+
 
     </div>
 
   </section>
 
 
-  <!-- LOGOUT -->
 
-  <button class="logout" onclick="logout()">
-    Logout
-  </button>
+  <!-- BUTTONS -->
+
+  <div class="buttons">
+
+    <button
+      class="vault-lock-btn"
+      onclick="lockVault()"
+    >
+      🔒 Lock Vault
+    </button>
+
+
+    <button
+      class="logout"
+      onclick="logout()"
+    >
+      Logout
+    </button>
+
+  </div>
+
 
 </main>
 
 
+
 <script>
 
-function logout(){
 
-  window.location.href = "index.html";
+/* 🔐 SECURITY STORAGE */
+
+const SECURITY_KEY =
+  "jeevanVaultPIN";
+
+
+
+/* CHECK SECURITY */
+
+function checkVaultSecurity(){
+
+  const savedPIN =
+    localStorage.getItem(SECURITY_KEY);
+
+
+  if(!savedPIN){
+
+    setupPIN();
+
+    return;
+
+  }
+
+
+  document.getElementById(
+    "securityOverlay"
+  ).style.display = "flex";
+
+
+  setTimeout(function(){
+
+    document.getElementById(
+      "securityPin"
+    ).focus();
+
+  },100);
 
 }
 
+
+
+/* SET / CHANGE PIN */
+
+function setupPIN(){
+
+  const oldPIN =
+    localStorage.getItem(SECURITY_KEY);
+
+
+  if(oldPIN){
+
+    const verify =
+      prompt(
+        "Enter your current PIN:"
+      );
+
+
+    if(verify !== oldPIN){
+
+      alert(
+        "Incorrect current PIN."
+      );
+
+      return;
+
+    }
+
+  }
+
+
+  const newPIN =
+    prompt(
+      "Create a new 4-6 digit PIN:"
+    );
+
+
+  if(!newPIN){
+
+    return;
+
+  }
+
+
+  if(!/^\d{4,6}$/.test(newPIN)){
+
+    alert(
+      "PIN must contain 4-6 digits only."
+    );
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+    SECURITY_KEY,
+    newPIN
+  );
+
+
+  alert(
+    "PIN saved successfully ✓"
+  );
+
+}
+
+
+
+/* 🔓 UNLOCK */
+
+function unlockVault(){
+
+  const enteredPIN =
+    document.getElementById(
+      "securityPin"
+    ).value;
+
+
+  const savedPIN =
+    localStorage.getItem(
+      SECURITY_KEY
+    );
+
+
+  if(enteredPIN === savedPIN){
+
+    document.getElementById(
+      "securityOverlay"
+    ).style.display = "none";
+
+
+    document.getElementById(
+      "securityPin"
+    ).value = "";
+
+
+    document.getElementById(
+      "securityMessage"
+    ).textContent =
+      "Enter your PIN to access your documents.";
+
+  }
+
+  else{
+
+    document.getElementById(
+      "securityMessage"
+    ).textContent =
+      "❌ Incorrect PIN. Please try again.";
+
+
+    document.getElementById(
+      "securityPin"
+    ).value = "";
+
+  }
+
+}
+
+
+
+/* 🔒 MANUAL LOCK */
+
+function lockVault(){
+
+  const overlay =
+    document.getElementById(
+      "securityOverlay"
+    );
+
+
+  const pinInput =
+    document.getElementById(
+      "securityPin"
+    );
+
+
+  const message =
+    document.getElementById(
+      "securityMessage"
+    );
+
+
+  message.textContent =
+    "Enter your PIN to access your documents.";
+
+
+  pinInput.value = "";
+
+
+  overlay.style.display =
+    "flex";
+
+
+  setTimeout(function(){
+
+    pinInput.focus();
+
+  },100);
+
+}
+
+
+
+/* ENTER KEY */
+
+document.getElementById(
+  "securityPin"
+).addEventListener(
+  "keydown",
+  function(event){
+
+    if(event.key === "Enter"){
+
+      unlockVault();
+
+    }
+
+  }
+);
+
+
+
+/* LOGOUT */
+
+function logout(){
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+
+/* PAGE OPEN */
+
+window.addEventListener(
+  "load",
+  function(){
+
+    checkVaultSecurity();
+
+  }
+);
+
 </script>
 
+
 </body>
+
 </html>
