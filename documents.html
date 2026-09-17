@@ -2659,7 +2659,283 @@ updateStats();
 
 
 </script>
+<!-- 🔐 SECURITY / PIN LOCK -->
 
+<div id="securityOverlay" class="security-overlay">
+
+  <div class="security-box">
+
+    <div class="security-icon">🔐</div>
+
+    <h2>JeevanVault Locked</h2>
+
+    <p id="securityMessage">
+      Enter your PIN to access your documents.
+    </p>
+
+    <input
+      type="password"
+      id="securityPin"
+      class="security-pin"
+      inputmode="numeric"
+      maxlength="6"
+      placeholder="Enter PIN"
+    >
+
+    <button
+      class="security-btn"
+      onclick="unlockVault()"
+    >
+      🔓 Unlock
+    </button>
+
+    <button
+      class="security-reset"
+      onclick="setupPIN()"
+    >
+      ⚙️ Set / Change PIN
+    </button>
+
+  </div>
+
+</div>
+
+
+<style>
+
+.security-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#111827;
+  z-index:9999;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.security-box{
+  width:100%;
+  max-width:380px;
+  background:white;
+  border-radius:20px;
+  padding:30px 22px;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(0,0,0,.3);
+}
+
+.security-icon{
+  font-size:55px;
+  margin-bottom:12px;
+}
+
+.security-box h2{
+  margin-bottom:8px;
+  color:#172033;
+}
+
+.security-box p{
+  color:#6b7280;
+  font-size:14px;
+  margin-bottom:20px;
+}
+
+.security-pin{
+  width:100%;
+  padding:14px;
+  border:1px solid #d1d5db;
+  border-radius:10px;
+  text-align:center;
+  font-size:20px;
+  letter-spacing:5px;
+  outline:none;
+  margin-bottom:12px;
+}
+
+.security-btn{
+  width:100%;
+  padding:13px;
+  border:none;
+  border-radius:10px;
+  background:#2563eb;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.security-reset{
+  width:100%;
+  padding:11px;
+  border:none;
+  background:#f3f4f6;
+  color:#374151;
+  border-radius:10px;
+  margin-top:10px;
+  cursor:pointer;
+}
+
+</style>
+
+
+<script>
+
+/* 🔐 SECURITY STORAGE */
+
+const SECURITY_KEY =
+  "jeevanVaultPIN";
+
+
+/* CHECK SECURITY */
+
+function checkVaultSecurity(){
+
+  const savedPIN =
+    localStorage.getItem(SECURITY_KEY);
+
+  if(!savedPIN){
+
+    setupPIN();
+
+    return;
+
+  }
+
+  document.getElementById(
+    "securityOverlay"
+  ).style.display = "flex";
+
+  document.getElementById(
+    "securityPin"
+  ).focus();
+
+}
+
+
+/* SET / CHANGE PIN */
+
+function setupPIN(){
+
+  const oldPIN =
+    localStorage.getItem(SECURITY_KEY);
+
+  if(oldPIN){
+
+    const verify =
+      prompt("Enter your current PIN:");
+
+    if(verify !== oldPIN){
+
+      alert("Incorrect current PIN.");
+
+      return;
+
+    }
+
+  }
+
+  const newPIN =
+    prompt(
+      "Create a new 4-6 digit PIN:"
+    );
+
+  if(!newPIN){
+
+    return;
+
+  }
+
+  if(!/^\d{4,6}$/.test(newPIN)){
+
+    alert(
+      "PIN must contain 4-6 digits only."
+    );
+
+    return;
+
+  }
+
+  localStorage.setItem(
+    SECURITY_KEY,
+    newPIN
+  );
+
+  alert(
+    "PIN saved successfully ✓"
+  );
+
+}
+
+
+/* UNLOCK */
+
+function unlockVault(){
+
+  const enteredPIN =
+    document.getElementById(
+      "securityPin"
+    ).value;
+
+  const savedPIN =
+    localStorage.getItem(SECURITY_KEY);
+
+  if(enteredPIN === savedPIN){
+
+    document.getElementById(
+      "securityOverlay"
+    ).style.display = "none";
+
+    document.getElementById(
+      "securityPin"
+    ).value = "";
+
+  }
+
+  else{
+
+    document.getElementById(
+      "securityMessage"
+    ).textContent =
+      "❌ Incorrect PIN. Please try again.";
+
+    document.getElementById(
+      "securityPin"
+    ).value = "";
+
+  }
+
+}
+
+
+/* ENTER KEY */
+
+document.getElementById(
+  "securityPin"
+).addEventListener(
+  "keydown",
+  function(event){
+
+    if(event.key === "Enter"){
+
+      unlockVault();
+
+    }
+
+  }
+);
+
+
+/* LOCK WHEN PAGE OPENS */
+
+window.addEventListener(
+  "load",
+  function(){
+
+    checkVaultSecurity();
+
+  }
+);
+
+</script>
 
 </body>
 
