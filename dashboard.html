@@ -10,7 +10,6 @@ content="width=device-width, initial-scale=1.0">
 
 <title>JeevanVault Dashboard</title>
 
-
 <style>
 
 *{
@@ -24,7 +23,6 @@ body{
   background:#f5f7fb;
   color:#172033;
 }
-
 
 /* HEADER */
 
@@ -54,7 +52,6 @@ body{
   font-weight:bold;
 }
 
-
 /* MAIN */
 
 .container{
@@ -75,7 +72,6 @@ body{
 .welcome p{
   color:#6b7280;
 }
-
 
 /* CARDS */
 
@@ -107,7 +103,6 @@ body{
   font-size:26px;
   font-weight:bold;
 }
-
 
 /* QUICK ACTIONS */
 
@@ -150,7 +145,6 @@ body{
   font-size:14px;
 }
 
-
 /* ACTIVITY */
 
 .activity{
@@ -181,7 +175,6 @@ body{
   font-size:14px;
   margin-top:5px;
 }
-
 
 /* BUTTONS */
 
@@ -215,7 +208,6 @@ body{
 .logout:active{
   transform:scale(.97);
 }
-
 
 /* SECURITY OVERLAY */
 
@@ -290,6 +282,28 @@ body{
   cursor:pointer;
 }
 
+.security-btn:active,
+.security-reset:active{
+  transform:scale(.98);
+}
+
+/* ATTEMPT MESSAGE */
+
+.attempt-message{
+  min-height:20px;
+  margin-top:10px;
+  margin-bottom:5px;
+  color:#dc2626 !important;
+  font-size:13px !important;
+  font-weight:bold;
+}
+
+/* LOCKED MESSAGE */
+
+.lockout-message{
+  color:#dc2626 !important;
+  font-weight:bold;
+}
 
 /* MOBILE */
 
@@ -305,6 +319,10 @@ body{
 
   .container{
     padding:20px 14px;
+  }
+
+  .welcome h1{
+    font-size:23px;
   }
 
 }
@@ -343,19 +361,24 @@ class="security-overlay">
       inputmode="numeric"
       maxlength="6"
       placeholder="Enter PIN"
+      autocomplete="off"
     >
 
+    <p
+      id="attemptMessage"
+      class="attempt-message">
+    </p>
+
     <button
+      id="unlockButton"
       class="security-btn"
-      onclick="unlockVault()"
-    >
+      onclick="unlockVault()">
       🔓 Unlock
     </button>
 
     <button
       class="security-reset"
-      onclick="setupPIN()"
-    >
+      onclick="setupPIN()">
       ⚙️ Set / Change PIN
     </button>
 
@@ -417,7 +440,8 @@ class="security-overlay">
         Documents
       </h3>
 
-      <div class="number"
+      <div
+      class="number"
       id="totalCount">
         0
       </div>
@@ -490,14 +514,12 @@ class="security-overlay">
       Quick Actions
     </h2>
 
-
     <div class="actions">
 
 
       <a
-        href="documents.html"
-        class="action"
-      >
+      href="documents.html"
+      class="action">
 
         <div class="action-icon">
           📄
@@ -516,9 +538,8 @@ class="security-overlay">
 
 
       <a
-        href="profile.html"
-        class="action"
-      >
+      href="profile.html"
+      class="action">
 
         <div class="action-icon">
           👤
@@ -537,9 +558,8 @@ class="security-overlay">
 
 
       <a
-        href="settings.html"
-        class="action"
-      >
+      href="settings.html"
+      class="action">
 
         <div class="action-icon">
           ⚙️
@@ -569,7 +589,6 @@ class="security-overlay">
     <h2>
       Recent Activity
     </h2>
-
 
     <div class="activity">
 
@@ -628,17 +647,15 @@ class="security-overlay">
   <div class="buttons">
 
     <button
-      class="vault-lock-btn"
-      onclick="lockVault()"
-    >
+    class="vault-lock-btn"
+    onclick="lockVault()">
       🔒 Lock Vault
     </button>
 
 
     <button
-      class="logout"
-      onclick="logout()"
-    >
+    class="logout"
+    onclick="logout()">
       Logout
     </button>
 
@@ -651,15 +668,25 @@ class="security-overlay">
 
 <script>
 
+/* =========================================
+   🔐 SECURITY SETTINGS
+========================================= */
 
-/* 🔐 SECURITY STORAGE */
+const SECURITY_KEY = "jeevanVaultPIN";
 
-const SECURITY_KEY =
-  "jeevanVaultPIN";
+const ATTEMPT_KEY = "jeevanVaultAttempts";
+
+const LOCKOUT_KEY = "jeevanVaultLockout";
+
+const AUTO_LOCK_TIME = 5 * 60 * 1000;
+
+let autoLockTimer = null;
 
 
 
-/* CHECK SECURITY */
+/* =========================================
+   CHECK SECURITY
+========================================= */
 
 function checkVaultSecurity(){
 
@@ -676,16 +703,43 @@ function checkVaultSecurity(){
   }
 
 
-  document.getElementById(
-    "securityOverlay"
-  ).style.display = "flex";
+  showLockScreen();
+
+}
+
+
+
+/* =========================================
+   SHOW LOCK SCREEN
+========================================= */
+
+function showLockScreen(){
+
+  const overlay =
+    document.getElementById(
+      "securityOverlay"
+    );
+
+  const pinInput =
+    document.getElementById(
+      "securityPin"
+    );
+
+
+  overlay.style.display = "flex";
+
+  pinInput.value = "";
+
+  updateLockoutStatus();
 
 
   setTimeout(function(){
 
-    document.getElementById(
-      "securityPin"
-    ).focus();
+    if(!isLockedOut()){
+
+      pinInput.focus();
+
+    }
 
   },100);
 
@@ -693,7 +747,9 @@ function checkVaultSecurity(){
 
 
 
-/* SET / CHANGE PIN */
+/* =========================================
+   SET / CHANGE PIN
+========================================= */
 
 function setupPIN(){
 
@@ -752,17 +808,174 @@ function setupPIN(){
   );
 
 
+  localStorage.setItem(
+    ATTEMPT_KEY,
+    "0"
+  );
+
+
+  localStorage.removeItem(
+    LOCKOUT_KEY
+  );
+
+
   alert(
     "PIN saved successfully ✓"
   );
+
+
+  if(oldPIN){
+
+    showLockScreen();
+
+  }
 
 }
 
 
 
-/* 🔓 UNLOCK */
+/* =========================================
+   CHECK LOCKOUT
+========================================= */
+
+function isLockedOut(){
+
+  const lockout =
+    Number(
+      localStorage.getItem(
+        LOCKOUT_KEY
+      ) || 0
+    );
+
+
+  if(!lockout){
+
+    return false;
+
+  }
+
+
+  if(Date.now() < lockout){
+
+    return true;
+
+  }
+
+
+  localStorage.removeItem(
+    LOCKOUT_KEY
+  );
+
+  localStorage.setItem(
+    ATTEMPT_KEY,
+    "0"
+  );
+
+  return false;
+
+}
+
+
+
+/* =========================================
+   UPDATE LOCKOUT STATUS
+========================================= */
+
+function updateLockoutStatus(){
+
+  const message =
+    document.getElementById(
+      "securityMessage"
+    );
+
+  const attemptMessage =
+    document.getElementById(
+      "attemptMessage"
+    );
+
+  const button =
+    document.getElementById(
+      "unlockButton"
+    );
+
+
+  if(isLockedOut()){
+
+    const lockout =
+      Number(
+        localStorage.getItem(
+          LOCKOUT_KEY
+        )
+      );
+
+
+    const seconds =
+      Math.ceil(
+        (lockout - Date.now()) / 1000
+      );
+
+
+    message.textContent =
+      "Too many incorrect attempts.";
+
+
+    message.className =
+      "lockout-message";
+
+
+    attemptMessage.textContent =
+      "Try again in " +
+      seconds +
+      " seconds.";
+
+
+    button.disabled = true;
+
+    button.style.opacity = "0.5";
+
+
+    setTimeout(
+      updateLockoutStatus,
+      1000
+    );
+
+    return;
+
+  }
+
+
+  message.textContent =
+    "Enter your PIN to access your documents.";
+
+
+  message.className = "";
+
+
+  attemptMessage.textContent = "";
+
+
+  button.disabled = false;
+
+  button.style.opacity = "1";
+
+}
+
+
+
+/* =========================================
+   🔓 UNLOCK
+========================================= */
 
 function unlockVault(){
+
+  if(isLockedOut()){
+
+    updateLockoutStatus();
+
+    return;
+
+  }
+
 
   const enteredPIN =
     document.getElementById(
@@ -777,6 +990,19 @@ function unlockVault(){
 
 
   if(enteredPIN === savedPIN){
+
+    /* SUCCESS */
+
+    localStorage.setItem(
+      ATTEMPT_KEY,
+      "0"
+    );
+
+
+    localStorage.removeItem(
+      LOCKOUT_KEY
+    );
+
 
     document.getElementById(
       "securityOverlay"
@@ -793,19 +1019,83 @@ function unlockVault(){
     ).textContent =
       "Enter your PIN to access your documents.";
 
+
+    document.getElementById(
+      "attemptMessage"
+    ).textContent = "";
+
+
+    startAutoLock();
+
   }
 
   else{
 
-    document.getElementById(
-      "securityMessage"
-    ).textContent =
-      "❌ Incorrect PIN. Please try again.";
+    /* WRONG PIN */
+
+    let attempts =
+      Number(
+        localStorage.getItem(
+          ATTEMPT_KEY
+        ) || 0
+      );
+
+
+    attempts++;
+
+
+    localStorage.setItem(
+      ATTEMPT_KEY,
+      attempts
+    );
 
 
     document.getElementById(
       "securityPin"
     ).value = "";
+
+
+    if(attempts >= 5){
+
+      const lockoutUntil =
+        Date.now() + (30 * 1000);
+
+
+      localStorage.setItem(
+        LOCKOUT_KEY,
+        lockoutUntil
+      );
+
+
+      document.getElementById(
+        "securityMessage"
+      ).textContent =
+        "🔒 Vault temporarily locked.";
+
+
+      updateLockoutStatus();
+
+    }
+
+    else{
+
+      const remaining =
+        5 - attempts;
+
+
+      document.getElementById(
+        "securityMessage"
+      ).textContent =
+        "❌ Incorrect PIN. Please try again.";
+
+
+      document.getElementById(
+        "attemptMessage"
+      ).textContent =
+        remaining +
+        " attempt(s) remaining.";
+
+    }
 
   }
 
@@ -813,9 +1103,14 @@ function unlockVault(){
 
 
 
-/* 🔒 MANUAL LOCK */
+/* =========================================
+   🔒 MANUAL LOCK
+========================================= */
 
 function lockVault(){
+
+  clearTimeout(autoLockTimer);
+
 
   const overlay =
     document.getElementById(
@@ -839,6 +1134,14 @@ function lockVault(){
     "Enter your PIN to access your documents.";
 
 
+  message.className = "";
+
+
+  document.getElementById(
+    "attemptMessage"
+  ).textContent = "";
+
+
   pinInput.value = "";
 
 
@@ -846,9 +1149,16 @@ function lockVault(){
     "flex";
 
 
+  updateLockoutStatus();
+
+
   setTimeout(function(){
 
-    pinInput.focus();
+    if(!isLockedOut()){
+
+      pinInput.focus();
+
+    }
 
   },100);
 
@@ -856,7 +1166,71 @@ function lockVault(){
 
 
 
-/* ENTER KEY */
+/* =========================================
+   ⏱️ AUTO LOCK
+========================================= */
+
+function startAutoLock(){
+
+  clearTimeout(autoLockTimer);
+
+
+  autoLockTimer =
+    setTimeout(function(){
+
+      lockVault();
+
+    },AUTO_LOCK_TIME);
+
+}
+
+
+
+/* =========================================
+   RESET AUTO LOCK ON ACTIVITY
+========================================= */
+
+function resetAutoLock(){
+
+  const overlay =
+    document.getElementById(
+      "securityOverlay"
+    );
+
+
+  if(
+    overlay.style.display !== "flex"
+  ){
+
+    startAutoLock();
+
+  }
+
+}
+
+
+document.addEventListener(
+  "click",
+  resetAutoLock
+);
+
+
+document.addEventListener(
+  "touchstart",
+  resetAutoLock
+);
+
+
+document.addEventListener(
+  "keydown",
+  resetAutoLock
+);
+
+
+
+/* =========================================
+   ENTER KEY
+========================================= */
 
 document.getElementById(
   "securityPin"
@@ -875,9 +1249,13 @@ document.getElementById(
 
 
 
-/* LOGOUT */
+/* =========================================
+   LOGOUT
+========================================= */
 
 function logout(){
+
+  clearTimeout(autoLockTimer);
 
   window.location.href =
     "index.html";
@@ -886,7 +1264,9 @@ function logout(){
 
 
 
-/* PAGE OPEN */
+/* =========================================
+   PAGE OPEN
+========================================= */
 
 window.addEventListener(
   "load",
