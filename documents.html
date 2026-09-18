@@ -2518,7 +2518,1605 @@ renderDocuments();
 updateStats();
 
 </script>
+<!-- =========================================================
+     JEEVANVAULT - NEW DOCUMENT PROTECTION SYSTEM
+     Paste this code just before </body>
+========================================================= -->
 
+<style>
+
+#jvProtectModal .pin-box{
+  max-width:400px;
+}
+
+#jvProtectModal .pin-title{
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+#jvProtectModal .pin-subtitle{
+  color:#6b7280;
+  font-size:14px;
+  line-height:1.5;
+  margin-bottom:18px;
+}
+
+#jvProtectModal .jv-pin-input{
+  width:100%;
+  padding:14px;
+  border:1px solid #d1d5db;
+  border-radius:10px;
+  outline:none;
+  text-align:center;
+  font-size:21px;
+  letter-spacing:5px;
+  margin-bottom:10px;
+}
+
+#jvProtectModal .jv-pin-input:focus{
+  border-color:#7c3aed;
+}
+
+#jvProtectModal .jv-error{
+  min-height:22px;
+  color:#dc2626;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:5px;
+}
+
+#jvProtectModal .jv-primary{
+  width:100%;
+  padding:13px;
+  border:none;
+  border-radius:9px;
+  background:#7c3aed;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+#jvProtectModal .jv-secondary{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:9px;
+  background:#e5e7eb;
+  color:#374151;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:9px;
+}
+
+.jv-protected-card{
+  border-color:#c4b5fd !important;
+}
+
+.jv-protected-badge{
+  display:inline-block;
+  margin-top:6px;
+  padding:4px 8px;
+  border-radius:7px;
+  background:#ede9fe;
+  color:#6d28d9;
+  font-size:12px;
+  font-weight:bold;
+}
+
+</style>
+
+
+<!-- =========================================================
+     NEW PROTECTION MODAL
+========================================================= -->
+
+<div
+  class="modal"
+  id="jvProtectModal"
+>
+
+  <div class="modal-box pin-box">
+
+    <div
+      class="pin-icon"
+      id="jvProtectIcon"
+    >
+      🔐
+    </div>
+
+
+    <div
+      class="pin-title"
+      id="jvProtectTitle"
+    >
+      Protect Document
+    </div>
+
+
+    <div
+      class="pin-subtitle"
+      id="jvProtectSubtitle"
+    >
+      Create a separate PIN for this document.
+    </div>
+
+
+    <input
+      type="password"
+      id="jvProtectPIN"
+      class="jv-pin-input"
+      inputmode="numeric"
+      maxlength="6"
+      autocomplete="off"
+      placeholder="Enter PIN"
+    >
+
+
+    <input
+      type="password"
+      id="jvProtectConfirm"
+      class="jv-pin-input"
+      inputmode="numeric"
+      maxlength="6"
+      autocomplete="off"
+      placeholder="Confirm PIN"
+    >
+
+
+    <div
+      class="jv-error"
+      id="jvProtectError"
+    ></div>
+
+
+    <button
+      class="jv-primary"
+      id="jvProtectButton"
+      onclick="jvHandleProtection()"
+    >
+      🔒 Protect Document
+    </button>
+
+
+    <button
+      class="jv-secondary"
+      onclick="jvCloseProtection()"
+    >
+      Cancel
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   JEEVANVAULT DOCUMENT PIN PROTECTION
+========================================================= */
+
+
+/* =========================
+   PROTECTION SETTINGS
+========================= */
+
+const JV_DOCUMENT_PIN_MIN = 4;
+
+const JV_DOCUMENT_PIN_MAX = 6;
+
+const JV_MAX_ATTEMPTS = 5;
+
+const JV_LOCK_TIME = 30000;
+
+
+/* =========================
+   CURRENT STATE
+========================= */
+
+let jvProtectionDocumentId = null;
+
+let jvProtectionMode = "protect";
+
+let jvPendingDocumentId = null;
+
+let jvPendingAction = null;
+
+
+/* =========================
+   WRONG PIN STATE
+========================= */
+
+const jvFailedAttempts = {};
+
+const jvLockedUntil = {};
+
+
+/* =========================================================
+   GET DOCUMENT
+========================================================= */
+
+function jvGetDocument(id){
+
+  const documents =
+    getDocuments();
+
+  return documents.find(
+    function(doc){
+
+      return String(doc.id) === String(id);
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   SAVE DOCUMENTS
+========================================================= */
+
+function jvSaveDocuments(documents){
+
+  try{
+
+    setDocuments(documents);
+
+    return true;
+
+  }catch(error){
+
+    alert(
+      "Unable to save protection settings."
+    );
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================================================
+   VALIDATE PIN
+========================================================= */
+
+function jvValidPIN(pin){
+
+  return /^\d{4,6}$/.test(pin);
+
+}
+
+
+/* =========================================================
+   OPEN PROTECT WINDOW
+========================================================= */
+
+function jvOpenProtect(id){
+
+  const doc =
+    jvGetDocument(id);
+
+  if(!doc){
+
+    alert(
+      "Document not found."
+    );
+
+    return;
+
+  }
+
+
+  jvProtectionDocumentId =
+    id;
+
+  jvProtectionMode =
+    "protect";
+
+
+  const modal =
+    document.getElementById(
+      "jvProtectModal"
+    );
+
+
+  const icon =
+    document.getElementById(
+      "jvProtectIcon"
+    );
+
+
+  const title =
+    document.getElementById(
+      "jvProtectTitle"
+    );
+
+
+  const subtitle =
+    document.getElementById(
+      "jvProtectSubtitle"
+    );
+
+
+  const confirm =
+    document.getElementById(
+      "jvProtectConfirm"
+    );
+
+
+  const button =
+    document.getElementById(
+      "jvProtectButton"
+    );
+
+
+  const pin =
+    document.getElementById(
+      "jvProtectPIN"
+    );
+
+
+  const error =
+    document.getElementById(
+      "jvProtectError"
+    );
+
+
+  icon.textContent =
+    "🔐";
+
+
+  title.textContent =
+    "Protect Document";
+
+
+  subtitle.textContent =
+    "Create a separate 4–6 digit PIN for this document.";
+
+
+  confirm.style.display =
+    "block";
+
+
+  confirm.value =
+    "";
+
+
+  pin.value =
+    "";
+
+
+  error.textContent =
+    "";
+
+
+  button.textContent =
+    "🔒 Protect Document";
+
+
+  modal.style.display =
+    "flex";
+
+
+  setTimeout(
+    function(){
+
+      pin.focus();
+
+    },
+    100
+  );
+
+}
+
+
+/* =========================================================
+   OPEN UNPROTECT WINDOW
+========================================================= */
+
+function jvOpenUnprotect(id){
+
+  const doc =
+    jvGetDocument(id);
+
+  if(!doc){
+
+    alert(
+      "Document not found."
+    );
+
+    return;
+
+  }
+
+
+  /*
+     Old protected documents may not yet
+     have a document-specific PIN.
+  */
+
+  if(!doc.protectionPIN){
+
+    alert(
+      "This document was protected with the old system.\n\n" +
+      "You will need to create a new document PIN."
+    );
+
+
+    jvOpenProtect(id);
+
+    return;
+
+  }
+
+
+  jvProtectionDocumentId =
+    id;
+
+  jvProtectionMode =
+    "unprotect";
+
+
+  const modal =
+    document.getElementById(
+      "jvProtectModal"
+    );
+
+
+  const icon =
+    document.getElementById(
+      "jvProtectIcon"
+    );
+
+
+  const title =
+    document.getElementById(
+      "jvProtectTitle"
+    );
+
+
+  const subtitle =
+    document.getElementById(
+      "jvProtectSubtitle"
+    );
+
+
+  const confirm =
+    document.getElementById(
+      "jvProtectConfirm"
+    );
+
+
+  const button =
+    document.getElementById(
+      "jvProtectButton"
+    );
+
+
+  const pin =
+    document.getElementById(
+      "jvProtectPIN"
+    );
+
+
+  const error =
+    document.getElementById(
+      "jvProtectError"
+    );
+
+
+  icon.textContent =
+    "🔓";
+
+
+  title.textContent =
+    "Remove Protection";
+
+
+  subtitle.textContent =
+    "Enter this document's PIN to remove protection.";
+
+
+  confirm.style.display =
+    "none";
+
+
+  confirm.value =
+    "";
+
+
+  pin.value =
+    "";
+
+
+  error.textContent =
+    "";
+
+
+  button.textContent =
+    "🔓 Remove Protection";
+
+
+  modal.style.display =
+    "flex";
+
+
+  setTimeout(
+    function(){
+
+      pin.focus();
+
+    },
+    100
+  );
+
+}
+
+
+/* =========================================================
+   HANDLE PROTECT / UNPROTECT
+========================================================= */
+
+function jvHandleProtection(){
+
+  const id =
+    jvProtectionDocumentId;
+
+
+  const doc =
+    jvGetDocument(id);
+
+
+  if(!doc){
+
+    jvCloseProtection();
+
+    return;
+
+  }
+
+
+  const pinInput =
+    document.getElementById(
+      "jvProtectPIN"
+    );
+
+
+  const confirmInput =
+    document.getElementById(
+      "jvProtectConfirm"
+    );
+
+
+  const error =
+    document.getElementById(
+      "jvProtectError"
+    );
+
+
+  const pin =
+    pinInput.value.trim();
+
+
+  error.textContent =
+    "";
+
+
+  /* =====================================================
+     UNPROTECT
+  ===================================================== */
+
+  if(jvProtectionMode === "unprotect"){
+
+    if(!jvValidPIN(pin)){
+
+      error.textContent =
+        "PIN must contain 4–6 digits.";
+
+      return;
+
+    }
+
+
+    if(pin !== doc.protectionPIN){
+
+      error.textContent =
+        "❌ Incorrect document PIN.";
+
+      pinInput.value =
+        "";
+
+      pinInput.focus();
+
+      return;
+
+    }
+
+
+    let documents =
+      getDocuments();
+
+
+    documents =
+      documents.map(
+        function(item){
+
+          if(
+            String(item.id) ===
+            String(id)
+          ){
+
+            item.protected =
+              false;
+
+            delete item.protectionPIN;
+
+          }
+
+          return item;
+
+        }
+      );
+
+
+    jvSaveDocuments(
+      documents
+    );
+
+
+    jvCloseProtection();
+
+
+    renderDocuments();
+
+    updateStats();
+
+
+    alert(
+      "Document protection removed ✓"
+    );
+
+
+    return;
+
+  }
+
+
+  /* =====================================================
+     PROTECT
+  ===================================================== */
+
+  if(!jvValidPIN(pin)){
+
+    error.textContent =
+      "PIN must contain 4–6 digits only.";
+
+    pinInput.focus();
+
+    return;
+
+  }
+
+
+  const confirmPIN =
+    confirmInput.value.trim();
+
+
+  if(pin !== confirmPIN){
+
+    error.textContent =
+      "❌ PINs do not match.";
+
+    confirmInput.value =
+      "";
+
+    confirmInput.focus();
+
+    return;
+
+  }
+
+
+  let documents =
+    getDocuments();
+
+
+  documents =
+    documents.map(
+      function(item){
+
+        if(
+          String(item.id) ===
+          String(id)
+        ){
+
+          item.protected =
+            true;
+
+          item.protectionPIN =
+            pin;
+
+        }
+
+        return item;
+
+      }
+    );
+
+
+  if(
+    !jvSaveDocuments(
+      documents
+    )
+  ){
+
+    return;
+
+  }
+
+
+  jvCloseProtection();
+
+
+  renderDocuments();
+
+  updateStats();
+
+
+  alert(
+    "Document protected successfully 🔐"
+  );
+
+}
+
+
+/* =========================================================
+   CLOSE PROTECTION MODAL
+========================================================= */
+
+function jvCloseProtection(){
+
+  const modal =
+    document.getElementById(
+      "jvProtectModal"
+    );
+
+
+  modal.style.display =
+    "none";
+
+
+  document.getElementById(
+    "jvProtectPIN"
+  ).value =
+    "";
+
+
+  document.getElementById(
+    "jvProtectConfirm"
+  ).value =
+    "";
+
+
+  document.getElementById(
+    "jvProtectError"
+  ).textContent =
+    "";
+
+
+  jvProtectionDocumentId =
+    null;
+
+}
+
+
+/* =========================================================
+   TOGGLE PROTECTION
+========================================================= */
+
+function toggleProtection(id){
+
+  const doc =
+    jvGetDocument(id);
+
+
+  if(!doc){
+
+    return;
+
+  }
+
+
+  if(doc.protected){
+
+    jvOpenUnprotect(id);
+
+  }
+
+  else{
+
+    jvOpenProtect(id);
+
+  }
+
+}
+
+
+/* =========================================================
+   CHECK LOCK STATUS
+========================================================= */
+
+function jvIsLocked(id){
+
+  const lockedUntil =
+    jvLockedUntil[id] || 0;
+
+
+  if(
+    Date.now() < lockedUntil
+  ){
+
+    return true;
+
+  }
+
+
+  delete jvLockedUntil[id];
+
+  jvFailedAttempts[id] =
+    0;
+
+
+  return false;
+
+}
+
+
+/* =========================================================
+   FORMAT REMAINING LOCK TIME
+========================================================= */
+
+function jvRemainingLockTime(id){
+
+  const remaining =
+    Math.ceil(
+      (
+        jvLockedUntil[id] -
+        Date.now()
+      ) / 1000
+    );
+
+
+  return Math.max(
+    0,
+    remaining
+  );
+
+}
+
+
+/* =========================================================
+   REQUEST PROTECTED ACTION
+========================================================= */
+
+function requestAction(
+  id,
+  action
+){
+
+  const doc =
+    jvGetDocument(id);
+
+
+  if(!doc){
+
+    alert(
+      "Document not found."
+    );
+
+    return;
+
+  }
+
+
+  if(!doc.protected){
+
+    performAction(
+      id,
+      action
+    );
+
+    return;
+
+  }
+
+
+  /*
+     If an old protected document has
+     no document PIN, ask the user to
+     create one first.
+  */
+
+  if(!doc.protectionPIN){
+
+    alert(
+      "This document uses the old protection system.\n\n" +
+      "Please create a new document PIN first."
+    );
+
+
+    jvOpenProtect(id);
+
+    return;
+
+  }
+
+
+  if(
+    jvIsLocked(id)
+  ){
+
+    alert(
+      "🔒 Document temporarily locked.\n\n" +
+      "Try again in " +
+      jvRemainingLockTime(id) +
+      " seconds."
+    );
+
+    return;
+
+  }
+
+
+  jvPendingDocumentId =
+    id;
+
+  jvPendingAction =
+    action;
+
+
+  jvOpenDocumentUnlock();
+
+}
+
+
+/* =========================================================
+   OPEN DOCUMENT UNLOCK
+========================================================= */
+
+function jvOpenDocumentUnlock(){
+
+  const modal =
+    document.getElementById(
+      "documentPinModal"
+    );
+
+
+  const title =
+    modal.querySelector(
+      "h2"
+    );
+
+
+  const text =
+    modal.querySelector(
+      "p"
+    );
+
+
+  const input =
+    document.getElementById(
+      "documentPin"
+    );
+
+
+  const error =
+    document.getElementById(
+      "pinError"
+    );
+
+
+  if(title){
+
+    title.textContent =
+      "Protected Document";
+
+  }
+
+
+  if(text){
+
+    text.textContent =
+      "Enter this document's PIN to continue.";
+
+  }
+
+
+  input.value =
+    "";
+
+
+  error.textContent =
+    "";
+
+
+  modal.style.display =
+    "flex";
+
+
+  setTimeout(
+    function(){
+
+      input.focus();
+
+    },
+    100
+  );
+
+}
+
+
+/* =========================================================
+   VERIFY DOCUMENT PIN
+========================================================= */
+
+function verifyDocumentPIN(){
+
+  const id =
+    jvPendingDocumentId;
+
+
+  const action =
+    jvPendingAction;
+
+
+  const doc =
+    jvGetDocument(id);
+
+
+  if(!doc){
+
+    closeDocumentPIN();
+
+    return;
+
+  }
+
+
+  if(
+    jvIsLocked(id)
+  ){
+
+    document.getElementById(
+      "pinError"
+    ).textContent =
+      "🔒 Document temporarily locked.";
+
+    return;
+
+  }
+
+
+  const entered =
+    document.getElementById(
+      "documentPin"
+    ).value.trim();
+
+
+  if(
+    entered ===
+    doc.protectionPIN
+  ){
+
+    jvFailedAttempts[id] =
+      0;
+
+
+    closeDocumentPIN();
+
+
+    jvPendingDocumentId =
+      null;
+
+    jvPendingAction =
+      null;
+
+
+    performAction(
+      id,
+      action
+    );
+
+
+    return;
+
+  }
+
+
+  /* =====================================================
+     WRONG PIN
+  ===================================================== */
+
+  jvFailedAttempts[id] =
+    (jvFailedAttempts[id] || 0) + 1;
+
+
+  const attempts =
+    jvFailedAttempts[id];
+
+
+  const error =
+    document.getElementById(
+      "pinError"
+    );
+
+
+  document.getElementById(
+    "documentPin"
+  ).value =
+    "";
+
+
+  if(
+    attempts >=
+    JV_MAX_ATTEMPTS
+  ){
+
+    jvLockedUntil[id] =
+      Date.now() +
+      JV_LOCK_TIME;
+
+
+    jvFailedAttempts[id] =
+      0;
+
+
+    error.textContent =
+      "🔒 Too many incorrect attempts. Locked for 30 seconds.";
+
+    return;
+
+  }
+
+
+  const left =
+    JV_MAX_ATTEMPTS -
+    attempts;
+
+
+  error.textContent =
+    "❌ Incorrect PIN. " +
+    left +
+    " attempt" +
+    (
+      left === 1
+      ? ""
+      : "s"
+    ) +
+    " remaining.";
+
+}
+
+
+/* =========================================================
+   EDIT PROTECTION
+========================================================= */
+
+function saveEdit(){
+
+  if(
+    typeof editingDocumentId ===
+    "undefined" ||
+    editingDocumentId === null
+  ){
+
+    return;
+
+  }
+
+
+  const name =
+    document.getElementById(
+      "editName"
+    ).value.trim();
+
+
+  if(!name){
+
+    alert(
+      "Please enter document name."
+    );
+
+    return;
+
+  }
+
+
+  const protectedValue =
+    document.getElementById(
+      "editProtected"
+    ).checked;
+
+
+  let documents =
+    getDocuments();
+
+
+  const currentDoc =
+    documents.find(
+      function(doc){
+
+        return String(doc.id) ===
+          String(editingDocumentId);
+
+      }
+    );
+
+
+  if(!currentDoc){
+
+    return;
+
+  }
+
+
+  /*
+     If protection is being turned ON
+     from Edit and no document PIN exists,
+     don't silently use the Vault PIN.
+  */
+
+  if(
+    protectedValue &&
+    !currentDoc.protected
+  ){
+
+    closeEdit();
+
+
+    jvOpenProtect(
+      editingDocumentId
+    );
+
+
+    return;
+
+  }
+
+
+  /*
+     Do not remove protection accidentally
+     from Edit.
+  */
+
+  if(
+    currentDoc.protected &&
+    !protectedValue
+  ){
+
+    alert(
+      "This document is protected.\n\n" +
+      "Remove protection using the 🔓 Remove Protection button."
+    );
+
+
+    return;
+
+  }
+
+
+  documents =
+    documents.map(
+      function(doc){
+
+        if(
+          String(doc.id) ===
+          String(editingDocumentId)
+        ){
+
+          doc.name =
+            name;
+
+          doc.category =
+            document.getElementById(
+              "editCategory"
+            ).value;
+
+          doc.expiry =
+            document.getElementById(
+              "editExpiry"
+            ).value;
+
+          doc.important =
+            document.getElementById(
+              "editImportant"
+            ).checked;
+
+        }
+
+        return doc;
+
+      }
+    );
+
+
+  setDocuments(
+    documents
+  );
+
+
+  closeEdit();
+
+  renderDocuments();
+
+  updateStats();
+
+
+  alert(
+    "Document updated successfully ✓"
+  );
+
+}
+
+
+/* =========================================================
+   MODAL OUTSIDE CLICK
+========================================================= */
+
+const jvProtectModal =
+  document.getElementById(
+    "jvProtectModal"
+  );
+
+
+if(jvProtectModal){
+
+  jvProtectModal.addEventListener(
+    "click",
+    function(event){
+
+      if(
+        event.target ===
+        this
+      ){
+
+        jvCloseProtection();
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   ENTER KEY - PROTECT MODAL
+========================================================= */
+
+document.getElementById(
+  "jvProtectPIN"
+).addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key ===
+      "Enter"
+    ){
+
+      jvHandleProtection();
+
+    }
+
+  }
+);
+
+
+document.getElementById(
+  "jvProtectConfirm"
+).addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key ===
+      "Enter"
+    ){
+
+      jvHandleProtection();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   ENTER KEY - DOCUMENT UNLOCK
+========================================================= */
+
+document.getElementById(
+  "documentPin"
+).addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key ===
+      "Enter"
+    ){
+
+      verifyDocumentPIN();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   UPDATE PROTECTED UI
+========================================================= */
+
+function jvUpdateProtectionUI(){
+
+  const documents =
+    getDocuments();
+
+
+  const cards =
+    document.querySelectorAll(
+      ".document"
+    );
+
+
+  cards.forEach(
+    function(card){
+
+      const buttons =
+        card.querySelectorAll(
+          "button"
+        );
+
+
+      let id =
+        null;
+
+
+      buttons.forEach(
+        function(button){
+
+          const onclick =
+            button.getAttribute(
+              "onclick"
+            );
+
+
+          if(!onclick){
+
+            return;
+
+          }
+
+
+          const match =
+            onclick.match(
+              /\(\s*(\d+)/
+            );
+
+
+          if(match){
+
+            id =
+              Number(
+                match[1]
+              );
+
+          }
+
+        }
+      );
+
+
+      if(id === null){
+
+        return;
+
+      }
+
+
+      const doc =
+        documents.find(
+          function(item){
+
+            return String(item.id) ===
+              String(id);
+
+          }
+        );
+
+
+      if(!doc){
+
+        return;
+
+      }
+
+
+      if(doc.protected){
+
+        card.classList.add(
+          "jv-protected-card"
+        );
+
+      }
+
+      else{
+
+        card.classList.remove(
+          "jv-protected-card"
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL IF CLICKED OUTSIDE
+========================================================= */
+
+const jvOldPinModal =
+  document.getElementById(
+    "documentPinModal"
+  );
+
+
+if(jvOldPinModal){
+
+  jvOldPinModal.addEventListener(
+    "click",
+    function(event){
+
+      if(
+        event.target ===
+        this
+      ){
+
+        closeDocumentPIN();
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   INITIAL RENDER
+========================================================= */
+
+setTimeout(
+  function(){
+
+    renderDocuments();
+
+    updateStats();
+
+    jvUpdateProtectionUI();
+
+  },
+  50
+);
+
+</script>
 </body>
 
 </html>
