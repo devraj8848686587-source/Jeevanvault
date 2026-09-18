@@ -1002,7 +1002,39 @@ function updateLockoutStatus(){
 }
 
 
+/* =========================================
+   👁️ SHOW / HIDE PIN
+========================================= */
 
+function togglePIN(){
+
+  const pinInput =
+    document.getElementById(
+      "securityPin"
+    );
+
+  const toggleButton =
+    document.getElementById(
+      "togglePin"
+    );
+
+  if(pinInput.type === "password"){
+
+    pinInput.type = "text";
+
+    toggleButton.textContent = "🙈";
+
+  }
+
+  else{
+
+    pinInput.type = "password";
+
+    toggleButton.textContent = "👁️";
+
+  }
+
+}
 /* =========================================
    🔓 UNLOCK
 ========================================= */
