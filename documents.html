@@ -4118,7 +4118,700 @@ setTimeout(
 
 </script>
 
+<!-- =========================================================
+     JEEVANVAULT - SECURE BACKUP & RESTORE v2
+========================================================= -->
 
+<style>
+.jv-secure-backup {
+  margin: 18px 0;
+  padding: 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+}
+
+.jv-secure-backup h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  color: #172033;
+}
+
+.jv-secure-backup p {
+  margin: 0 0 15px;
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.jv-secure-backup button {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#jvSecureCreateBackup {
+  background: #111827;
+  color: white;
+}
+
+#jvSecureRestoreBackup {
+  background: #7c3aed;
+  color: white;
+}
+
+#jvSecureBackupStatus {
+  margin-top: 12px;
+  min-height: 20px;
+  font-size: 13px;
+  font-weight: 700;
+}
+</style>
+
+
+<div class="jv-secure-backup" id="jvSecureBackupCard">
+
+  <h3>📦 Secure Backup & Restore</h3>
+
+  <p>
+    Save your JeevanVault documents and restore them later.
+    <br>
+    🔐 Password, Vault PIN and login session are never backed up.
+  </p>
+
+  <button
+    type="button"
+    id="jvSecureCreateBackup">
+    🔐 Create Secure Backup
+  </button>
+
+  <button
+    type="button"
+    id="jvSecureRestoreBackup">
+    📥 Restore Backup
+  </button>
+
+  <input
+    type="file"
+    id="jvSecureBackupFile"
+    accept=".json,application/json"
+    style="display:none;">
+
+  <div id="jvSecureBackupStatus"></div>
+
+</div>
+
+
+<script>
+(function () {
+
+  "use strict";
+
+
+  /* =====================================================
+     STORAGE
+  ===================================================== */
+
+  const DOCUMENTS_KEY =
+    "jeevanVaultDocuments";
+
+
+  const PASSWORD_KEY =
+    "jeevanVaultPassword";
+
+
+  const PIN_KEY =
+    "jeevanVaultPIN";
+
+
+  const LOGIN_KEY =
+    "jeevanVaultLoggedIn";
+
+
+  /* =====================================================
+     ELEMENTS
+  ===================================================== */
+
+  const createBtn =
+    document.getElementById(
+      "jvSecureCreateBackup"
+    );
+
+
+  const restoreBtn =
+    document.getElementById(
+      "jvSecureRestoreBackup"
+    );
+
+
+  const fileInput =
+    document.getElementById(
+      "jvSecureBackupFile"
+    );
+
+
+  const status =
+    document.getElementById(
+      "jvSecureBackupStatus"
+    );
+
+
+  /* =====================================================
+     STATUS MESSAGE
+  ===================================================== */
+
+  function setStatus(message, success) {
+
+    if (!status) {
+      return;
+    }
+
+    status.textContent =
+      message;
+
+    status.style.color =
+      success
+        ? "#15803d"
+        : "#dc2626";
+  }
+
+
+  /* =====================================================
+     READ DOCUMENTS
+  ===================================================== */
+
+  function readDocuments() {
+
+    try {
+
+      /*
+       * If the existing app already has
+       * getDocuments(), use it.
+       */
+
+      if (
+        typeof getDocuments ===
+        "function"
+      ) {
+
+        const docs =
+          getDocuments();
+
+        if (
+          Array.isArray(docs)
+        ) {
+
+          return docs;
+        }
+      }
+
+
+      /*
+       * Fallback to localStorage.
+       */
+
+      const saved =
+        localStorage.getItem(
+          DOCUMENTS_KEY
+        );
+
+
+      if (!saved) {
+        return [];
+      }
+
+
+      const parsed =
+        JSON.parse(saved);
+
+
+      return Array.isArray(parsed)
+        ? parsed
+        : [];
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "JeevanVault backup read error:",
+        error
+      );
+
+      return [];
+    }
+  }
+
+
+  /* =====================================================
+     CREATE BACKUP
+  ===================================================== */
+
+  function createSecureBackup() {
+
+    try {
+
+      const documents =
+        readDocuments();
+
+
+      const backup = {
+
+        app:
+          "JeevanVault",
+
+        backupType:
+          "Secure Backup",
+
+        backupVersion:
+          "2.0",
+
+        createdAt:
+          new Date().toISOString(),
+
+        documentCount:
+          documents.length,
+
+        excluded:
+
+          [
+            PASSWORD_KEY,
+            PIN_KEY,
+            LOGIN_KEY
+          ],
+
+        data: {
+
+          documents:
+            documents
+
+        }
+
+      };
+
+
+      const json =
+        JSON.stringify(
+          backup,
+          null,
+          2
+        );
+
+
+      const blob =
+        new Blob(
+          [json],
+          {
+            type:
+              "application/json"
+          }
+        );
+
+
+      const url =
+        URL.createObjectURL(
+          blob
+        );
+
+
+      const link =
+        document.createElement(
+          "a"
+        );
+
+
+      const date =
+        new Date()
+          .toISOString()
+          .slice(0,10);
+
+
+      link.href =
+        url;
+
+
+      link.download =
+        "JeevanVault-Secure-Backup-v2-" +
+        date +
+        ".json";
+
+
+      document.body.appendChild(
+        link
+      );
+
+
+      link.click();
+
+
+      document.body.removeChild(
+        link
+      );
+
+
+      setTimeout(
+        function () {
+
+          URL.revokeObjectURL(
+            url
+          );
+
+        },
+        1000
+      );
+
+
+      setStatus(
+        "✅ Secure backup created successfully.",
+        true
+      );
+
+
+      alert(
+        "Secure Backup created successfully!\n\n" +
+        "Documents backed up: " +
+        documents.length +
+        "\n\n" +
+        "Password: Not included\n" +
+        "Vault PIN: Not included"
+      );
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Create backup error:",
+        error
+      );
+
+
+      setStatus(
+        "❌ Backup creation failed.",
+        false
+      );
+
+
+      alert(
+        "Backup creation failed."
+      );
+    }
+  }
+
+
+  /* =====================================================
+     OPEN RESTORE FILE PICKER
+  ===================================================== */
+
+  function openRestorePicker() {
+
+    if (!fileInput) {
+      return;
+    }
+
+    fileInput.value = "";
+
+    fileInput.click();
+  }
+
+
+  /* =====================================================
+     RESTORE BACKUP
+  ===================================================== */
+
+  function restoreSecureBackup(event) {
+
+    const file =
+      event.target.files &&
+      event.target.files[0];
+
+
+    if (!file) {
+      return;
+    }
+
+
+    const reader =
+      new FileReader();
+
+
+    reader.onload =
+      function () {
+
+        try {
+
+          const backup =
+            JSON.parse(
+              reader.result
+            );
+
+
+          /* ---------------------------------------------
+             VALIDATE APP
+          --------------------------------------------- */
+
+          if (
+            !backup ||
+            backup.app !==
+              "JeevanVault"
+          ) {
+
+            throw new Error(
+              "Invalid JeevanVault backup"
+            );
+          }
+
+
+          /* ---------------------------------------------
+             VALIDATE VERSION
+          --------------------------------------------- */
+
+          if (
+            backup.backupVersion !==
+              "2.0"
+          ) {
+
+            throw new Error(
+              "Unsupported backup version"
+            );
+          }
+
+
+          /* ---------------------------------------------
+             GET DOCUMENT DATA
+          --------------------------------------------- */
+
+          if (
+            !backup.data ||
+            !Array.isArray(
+              backup.data.documents
+            )
+          ) {
+
+            throw new Error(
+              "Document data missing"
+            );
+          }
+
+
+          const documents =
+            backup.data.documents;
+
+
+          /* ---------------------------------------------
+             CONFIRM RESTORE
+          --------------------------------------------- */
+
+          const confirmed =
+            confirm(
+              "⚠️ Restore Secure Backup?\n\n" +
+
+              "Documents in backup: " +
+              documents.length +
+
+              "\n\n" +
+
+              "Current documents will be replaced.\n\n" +
+
+              "Your password will NOT change.\n" +
+
+              "Your Vault PIN will NOT change.\n\n" +
+
+              "Continue?"
+            );
+
+
+          if (!confirmed) {
+
+            return;
+          }
+
+
+          /* ---------------------------------------------
+             SAVE DOCUMENTS
+          --------------------------------------------- */
+
+          localStorage.setItem(
+            DOCUMENTS_KEY,
+            JSON.stringify(
+              documents
+            )
+          );
+
+
+          /* ---------------------------------------------
+             UPDATE EXISTING APP
+          --------------------------------------------- */
+
+          if (
+            typeof setDocuments ===
+            "function"
+          ) {
+
+            try {
+
+              setDocuments(
+                documents
+              );
+
+            }
+
+            catch (error) {
+
+              console.warn(
+                "setDocuments update skipped:",
+                error
+              );
+            }
+          }
+
+
+          if (
+            typeof renderDocuments ===
+            "function"
+          ) {
+
+            try {
+
+              renderDocuments();
+
+            }
+
+            catch (error) {
+
+              console.warn(
+                "renderDocuments update skipped:",
+                error
+              );
+            }
+          }
+
+
+          if (
+            typeof updateStats ===
+            "function"
+          ) {
+
+            try {
+
+              updateStats();
+
+            }
+
+            catch (error) {
+
+              console.warn(
+                "updateStats update skipped:",
+                error
+              );
+            }
+          }
+
+
+          setStatus(
+            "✅ Backup restored successfully.",
+            true
+          );
+
+
+          alert(
+            "Backup restored successfully!\n\n" +
+
+            "Documents restored: " +
+            documents.length +
+
+            "\n\n" +
+
+            "Password unchanged.\n" +
+            "Vault PIN unchanged."
+          );
+
+
+        }
+
+        catch (error) {
+
+          console.error(
+            "Restore error:",
+            error
+          );
+
+
+          setStatus(
+            "❌ Invalid or damaged backup file.",
+            false
+          );
+
+
+          alert(
+            "Restore failed.\n\n" +
+            "Please select a valid JeevanVault Secure Backup v2 file."
+          );
+        }
+
+      };
+
+
+    reader.onerror =
+      function () {
+
+        setStatus(
+          "❌ Unable to read backup file.",
+          false
+        );
+
+
+        alert(
+          "Unable to read the backup file."
+        );
+      };
+
+
+    reader.readAsText(
+      file
+    );
+  }
+
+
+  /* =====================================================
+     CONNECT BUTTONS
+  ===================================================== */
+
+  if (createBtn) {
+
+    createBtn.addEventListener(
+      "click",
+      createSecureBackup
+    );
+  }
+
+
+  if (restoreBtn) {
+
+    restoreBtn.addEventListener(
+      "click",
+      openRestorePicker
+    );
+  }
+
+
+  if (fileInput) {
+
+    fileInput.addEventListener(
+      "change",
+      restoreSecureBackup
+    );
+  }
+
+
+})();
+</script>
 </body>
 
 </html>
