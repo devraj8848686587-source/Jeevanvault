@@ -1,0 +1,4817 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>JeevanVault - Documents</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
+:root{
+  --bg:#f4f7fb;
+  --card:#ffffff;
+  --text:#172033;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --primary:#2563eb;
+  --danger:#dc2626;
+  --success:#16a34a;
+  --warning:#f59e0b;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+
+/* HEADER */
+
+.header{
+  background:#111827;
+  color:white;
+  padding:15px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  font-size:21px;
+  font-weight:bold;
+}
+
+.back{
+  color:white;
+  text-decoration:none;
+  background:var(--primary);
+  padding:9px 14px;
+  border-radius:8px;
+  font-weight:bold;
+}
+
+/* MAIN */
+
+.container{
+  max-width:950px;
+  margin:auto;
+  padding:25px 16px 50px;
+}
+
+.title{
+  margin-bottom:20px;
+}
+
+.title h1{
+  font-size:28px;
+  margin-bottom:7px;
+}
+
+.title p{
+  color:var(--muted);
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.stat{
+  background:var(--card);
+  padding:18px;
+  border-radius:14px;
+  border:1px solid var(--border);
+}
+
+.stat strong{
+  display:block;
+  font-size:25px;
+  margin-bottom:5px;
+}
+
+.stat span{
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* UPLOAD */
+
+.upload-box{
+  background:white;
+  border:2px dashed #cbd5e1;
+  border-radius:16px;
+  padding:25px;
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.upload-box h2{
+  margin-bottom:8px;
+}
+
+.upload-box p{
+  color:var(--muted);
+  font-size:14px;
+  margin-bottom:18px;
+}
+
+.file-input{
+  position:absolute;
+  width:1px;
+  height:1px;
+  opacity:0;
+}
+
+.upload-btn{
+  display:inline-block;
+  background:var(--primary);
+  color:white;
+  padding:12px 18px;
+  border-radius:9px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+/* FORM */
+
+.form-box{
+  display:none;
+  background:white;
+  padding:20px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  margin-bottom:20px;
+}
+
+label{
+  display:block;
+  font-size:14px;
+  font-weight:bold;
+  margin:13px 0 7px;
+}
+
+.input,
+.select{
+  width:100%;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:white;
+  outline:none;
+}
+
+.input:focus,
+.select:focus{
+  border-color:var(--primary);
+}
+
+.check-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.check-row input{
+  width:18px;
+  height:18px;
+}
+
+.save-btn,
+.cancel-btn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:9px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.save-btn{
+  margin-top:18px;
+  background:var(--primary);
+  color:white;
+}
+
+.cancel-btn{
+  margin-top:10px;
+  background:#e5e7eb;
+}
+
+/* TOOLBAR */
+
+.toolbar{
+  display:flex;
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.search{
+  flex:1;
+}
+
+.category-filter{
+  width:180px;
+}
+
+/* DOCUMENT */
+
+.documents{
+  display:grid;
+  gap:14px;
+}
+
+.document{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:18px;
+}
+
+.doc-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.doc-name{
+  font-size:17px;
+  font-weight:bold;
+  margin-bottom:6px;
+  word-break:break-word;
+}
+
+.doc-meta{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
+  word-break:break-word;
+}
+
+.doc-icon{
+  font-size:30px;
+}
+
+.important{
+  color:#d97706;
+  font-weight:bold;
+  font-size:13px;
+  margin-top:5px;
+}
+
+.protected{
+  color:#7c3aed;
+  font-weight:bold;
+  font-size:13px;
+  margin-top:5px;
+}
+
+.expired{
+  color:var(--danger);
+  font-weight:bold;
+  font-size:13px;
+}
+
+.valid{
+  color:var(--success);
+  font-weight:bold;
+  font-size:13px;
+}
+
+/* BUTTONS */
+
+.doc-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:15px;
+}
+
+.btn{
+  border:none;
+  padding:9px 12px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.preview{
+  background:#dbeafe;
+  color:#1e40af;
+}
+
+.download{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.edit{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+.important-btn{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+.protect-btn{
+  background:#ede9fe;
+  color:#6d28d9;
+}
+
+.delete{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+/* EMPTY */
+
+.empty{
+  background:white;
+  border-radius:15px;
+  padding:35px;
+  text-align:center;
+  color:var(--muted);
+}
+
+/* MODALS */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  align-items:center;
+  justify-content:center;
+  padding:12px;
+  z-index:100;
+}
+
+.modal-box{
+  width:100%;
+  max-width:800px;
+  height:90vh;
+  background:white;
+  border-radius:15px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+.modal-header{
+  padding:14px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #ddd;
+}
+
+.close{
+  border:none;
+  background:#fee2e2;
+  color:#991b1b;
+  padding:8px 12px;
+  border-radius:7px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.preview-content{
+  flex:1;
+  overflow:auto;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:15px;
+}
+
+.preview-content img{
+  max-width:100%;
+  max-height:100%;
+}
+
+.preview-content iframe{
+  width:100%;
+  height:100%;
+  border:none;
+}
+
+/* EDIT */
+
+.edit-box{
+  max-width:550px;
+  height:auto;
+  max-height:90vh;
+}
+
+.edit-content{
+  padding:20px;
+  overflow:auto;
+}
+
+.edit-save,
+.edit-cancel{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:9px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.edit-save{
+  margin-top:18px;
+  background:var(--primary);
+  color:white;
+}
+
+.edit-cancel{
+  margin-top:10px;
+  background:#e5e7eb;
+}
+
+/* PIN */
+
+.pin-box{
+  max-width:380px;
+  height:auto;
+  padding:25px;
+  text-align:center;
+}
+
+.pin-icon{
+  font-size:50px;
+  margin-bottom:10px;
+}
+
+.pin-box p{
+  color:var(--muted);
+  font-size:14px;
+  margin:10px 0;
+}
+
+.pin-input{
+  width:100%;
+  padding:14px;
+  text-align:center;
+  font-size:20px;
+  letter-spacing:5px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  outline:none;
+}
+
+.pin-btn,
+.pin-cancel{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:9px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.pin-btn{
+  margin-top:12px;
+  background:var(--primary);
+  color:white;
+}
+
+.pin-cancel{
+  margin-top:8px;
+  background:#e5e7eb;
+}
+
+.pin-error{
+  min-height:20px;
+  color:var(--danger)!important;
+  font-weight:bold;
+}
+
+/* MOBILE */
+
+@media(max-width:650px){
+
+  .container{
+    padding:20px 12px 40px;
+  }
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .toolbar{
+    flex-direction:column;
+  }
+
+  .category-filter{
+    width:100%;
+  }
+
+  .doc-actions{
+    flex-direction:column;
+  }
+
+  .btn{
+    width:100%;
+    min-height:42px;
+  }
+
+  .title h1{
+    font-size:24px;
+  }
+
+  .logo{
+    font-size:18px;
+  }
+
+  .back{
+    font-size:13px;
+  }
+
+  .modal-box{
+    height:94vh;
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<header class="header">
+
+  <div class="logo">
+    🔐 JeevanVault
+  </div>
+
+  <a
+    href="dashboard.html"
+    class="back">
+    ← Dashboard
+  </a>
+
+</header>
+
+
+<main class="container">
+
+
+  <div class="title">
+
+    <h1>
+      📁 My Documents
+    </h1>
+
+    <p>
+      Upload, organize and securely manage your documents.
+    </p>
+
+  </div>
+
+
+  <!-- STATS -->
+
+  <div class="stats">
+
+    <div class="stat">
+      <strong id="totalCount">0</strong>
+      <span>Total Documents</span>
+    </div>
+
+    <div class="stat">
+      <strong id="importantCount">0</strong>
+      <span>Important</span>
+    </div>
+
+    <div class="stat">
+      <strong id="categoryCount">0</strong>
+      <span>Categories</span>
+    </div>
+
+  </div>
+
+
+  <!-- UPLOAD -->
+
+  <div class="upload-box">
+
+    <h2>
+      📤 Upload Document
+    </h2>
+
+    <p>
+      Select a PDF, JPG, JPEG or PNG file.
+    </p>
+
+    <label class="upload-btn">
+
+      Choose File
+
+      <input
+        type="file"
+        id="fileInput"
+        class="file-input"
+        accept=".pdf,.jpg,.jpeg,.png"
+        onchange="fileSelected()">
+
+    </label>
+
+  </div>
+
+
+  <!-- FORM -->
+
+  <div
+    class="form-box"
+    id="formBox">
+
+    <h2>
+      Document Details
+    </h2>
+
+
+    <label>
+      Document Name
+    </label>
+
+    <input
+      class="input"
+      id="docName"
+      type="text"
+      placeholder="Example: Aadhaar Card">
+
+
+    <label>
+      Category
+    </label>
+
+    <select
+      class="select"
+      id="docCategory">
+
+      <option>Aadhaar</option>
+      <option>PAN</option>
+      <option>Education</option>
+      <option>Bank</option>
+      <option>Insurance</option>
+      <option>Identity</option>
+      <option>Medical</option>
+      <option>Other</option>
+
+    </select>
+
+
+    <label>
+      Expiry Date (optional)
+    </label>
+
+    <input
+      class="input"
+      id="expiryDate"
+      type="date">
+
+
+    <label class="check-row">
+
+      <input
+        type="checkbox"
+        id="important">
+
+      ⭐ Mark as Important
+
+    </label>
+
+
+    <label class="check-row">
+
+      <input
+        type="checkbox"
+        id="protectedDocument">
+
+      🔐 Protect this document with PIN
+
+    </label>
+
+
+    <button
+      class="save-btn"
+      onclick="saveDocument()">
+
+      💾 Save Document
+
+    </button>
+
+
+    <button
+      class="cancel-btn"
+      onclick="cancelUpload()">
+
+      Cancel
+
+    </button>
+
+  </div>
+
+
+  <!-- SEARCH -->
+
+  <div class="toolbar">
+
+    <input
+      class="input search"
+      id="search"
+      type="search"
+      placeholder="🔍 Search documents..."
+      oninput="renderDocuments()">
+
+
+    <select
+      class="select category-filter"
+      id="categoryFilter"
+      onchange="renderDocuments()">
+
+      <option value="All">
+        All Categories
+      </option>
+
+      <option>Aadhaar</option>
+      <option>PAN</option>
+      <option>Education</option>
+      <option>Bank</option>
+      <option>Insurance</option>
+      <option>Identity</option>
+      <option>Medical</option>
+      <option>Other</option>
+
+    </select>
+
+  </div>
+
+
+  <div
+    class="documents"
+    id="documents">
+  </div>
+
+
+</main>
+
+
+<!-- PREVIEW MODAL -->
+
+<div
+  class="modal"
+  id="previewModal">
+
+  <div class="modal-box">
+
+    <div class="modal-header">
+
+      <strong id="previewTitle">
+        Document Preview
+      </strong>
+
+      <button
+        class="close"
+        onclick="closePreview()">
+
+        ✕ Close
+
+      </button>
+
+    </div>
+
+    <div
+      class="preview-content"
+      id="previewContent">
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- EDIT MODAL -->
+
+<div
+  class="modal"
+  id="editModal">
+
+  <div class="modal-box edit-box">
+
+    <div class="modal-header">
+
+      <strong>
+        ✏️ Edit Document
+      </strong>
+
+      <button
+        class="close"
+        onclick="closeEdit()">
+
+        ✕ Close
+
+      </button>
+
+    </div>
+
+
+    <div class="edit-content">
+
+      <label>
+        Document Name
+      </label>
+
+      <input
+        class="input"
+        id="editName"
+        type="text">
+
+
+      <label>
+        Category
+      </label>
+
+      <select
+        class="select"
+        id="editCategory">
+
+        <option>Aadhaar</option>
+        <option>PAN</option>
+        <option>Education</option>
+        <option>Bank</option>
+        <option>Insurance</option>
+        <option>Identity</option>
+        <option>Medical</option>
+        <option>Other</option>
+
+      </select>
+
+
+      <label>
+        Expiry Date
+      </label>
+
+      <input
+        class="input"
+        id="editExpiry"
+        type="date">
+
+
+      <label class="check-row">
+
+        <input
+          type="checkbox"
+          id="editImportant">
+
+        ⭐ Important
+
+      </label>
+
+
+      <label class="check-row">
+
+        <input
+          type="checkbox"
+          id="editProtected">
+
+        🔐 Protect with PIN
+
+      </label>
+
+
+      <button
+        class="edit-save"
+        onclick="saveEdit()">
+
+        💾 Save Changes
+
+      </button>
+
+
+      <button
+        class="edit-cancel"
+        onclick="closeEdit()">
+
+        Cancel
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- PIN MODAL -->
+
+<div
+  class="modal"
+  id="documentPinModal">
+
+  <div class="modal-box pin-box">
+
+    <div class="pin-icon">
+      🔐
+    </div>
+
+    <h2>
+      Protected Document
+    </h2>
+
+    <p>
+      Enter your JeevanVault PIN to continue.
+    </p>
+
+    <input
+      type="password"
+      id="documentPin"
+      class="pin-input"
+      inputmode="numeric"
+      maxlength="6"
+      placeholder="PIN"
+      autocomplete="off">
+
+
+    <p
+      id="pinError"
+      class="pin-error">
+    </p>
+
+
+    <button
+      class="pin-btn"
+      onclick="verifyDocumentPIN()">
+
+      🔓 Unlock
+
+    </button>
+
+
+    <button
+      class="pin-cancel"
+      onclick="closeDocumentPIN()">
+
+      Cancel
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   STORAGE
+========================= */
+
+const STORAGE_KEY =
+  "jeevanVaultDocuments";
+
+const SECURITY_KEY =
+  "jeevanVaultPIN";
+
+
+let editingDocumentId =
+  null;
+
+let pendingDocumentId =
+  null;
+
+let pendingAction =
+  null;
+
+
+/* =========================
+   GET DOCUMENTS
+========================= */
+
+function getDocuments(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        STORAGE_KEY
+      ) || "[]"
+    );
+
+  }catch(error){
+
+    return [];
+
+  }
+
+}
+
+
+/* =========================
+   SAVE DOCUMENTS
+========================= */
+
+function setDocuments(documents){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(documents)
+  );
+
+}
+
+
+/* =========================
+   FILE SELECTED
+========================= */
+
+function fileSelected(){
+
+  const input =
+    document.getElementById(
+      "fileInput"
+    );
+
+
+  if(!input.files.length){
+
+    return;
+
+  }
+
+
+  const file =
+    input.files[0];
+
+
+  const allowedTypes = [
+
+    "application/pdf",
+    "image/jpeg",
+    "image/png"
+
+  ];
+
+
+  if(
+    !allowedTypes.includes(
+      file.type
+    )
+  ){
+
+    alert(
+      "Only PDF, JPG, JPEG and PNG files are allowed."
+    );
+
+    input.value = "";
+
+    return;
+
+  }
+
+
+  document.getElementById(
+    "docName"
+  ).value =
+    file.name.replace(
+      /\.[^/.]+$/,
+      ""
+    );
+
+
+  document.getElementById(
+    "formBox"
+  ).style.display =
+    "block";
+
+}
+
+
+/* =========================
+   CANCEL UPLOAD
+========================= */
+
+function cancelUpload(){
+
+  document.getElementById(
+    "fileInput"
+  ).value = "";
+
+  document.getElementById(
+    "docName"
+  ).value = "";
+
+  document.getElementById(
+    "expiryDate"
+  ).value = "";
+
+  document.getElementById(
+    "important"
+  ).checked = false;
+
+  document.getElementById(
+    "protectedDocument"
+  ).checked = false;
+
+  document.getElementById(
+    "formBox"
+  ).style.display =
+    "none";
+
+}
+
+
+/* =========================
+   SAVE DOCUMENT
+========================= */
+
+function saveDocument(){
+
+  const input =
+    document.getElementById(
+      "fileInput"
+    );
+
+
+  if(!input.files.length){
+
+    alert(
+      "Please choose a file first."
+    );
+
+    return;
+
+  }
+
+
+  const file =
+    input.files[0];
+
+
+  const name =
+    document.getElementById(
+      "docName"
+    ).value.trim();
+
+
+  if(!name){
+
+    alert(
+      "Please enter document name."
+    );
+
+    return;
+
+  }
+
+
+  const isProtected =
+    document.getElementById(
+      "protectedDocument"
+    ).checked;
+
+
+  if(
+    isProtected &&
+    !localStorage.getItem(
+      SECURITY_KEY
+    )
+  ){
+
+    alert(
+      "Please set your JeevanVault PIN first."
+    );
+
+    return;
+
+  }
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload =
+    function(event){
+
+      const documents =
+        getDocuments();
+
+
+      const newDocument = {
+
+        id:Date.now(),
+
+        name:name,
+
+        category:
+          document.getElementById(
+            "docCategory"
+          ).value,
+
+        expiry:
+          document.getElementById(
+            "expiryDate"
+          ).value,
+
+        important:
+          document.getElementById(
+            "important"
+          ).checked,
+
+        protected:isProtected,
+
+        fileName:file.name,
+
+        fileType:file.type,
+
+        fileData:event.target.result,
+
+        createdAt:
+          new Date().toISOString()
+
+      };
+
+
+      documents.push(
+        newDocument
+      );
+
+
+      try{
+
+        setDocuments(
+          documents
+        );
+
+      }catch(error){
+
+        alert(
+          "Storage full. Please remove some documents."
+        );
+
+        return;
+
+      }
+
+
+      cancelUpload();
+
+      renderDocuments();
+
+      updateStats();
+
+
+      alert(
+        "Document saved successfully ✓"
+      );
+
+    };
+
+
+  reader.readAsDataURL(file);
+
+}
+
+
+/* =========================
+   RENDER DOCUMENTS
+========================= */
+
+function renderDocuments(){
+
+  const container =
+    document.getElementById(
+      "documents"
+    );
+
+
+  const search =
+    document.getElementById(
+      "search"
+    ).value
+    .toLowerCase()
+    .trim();
+
+
+  const category =
+    document.getElementById(
+      "categoryFilter"
+    ).value;
+
+
+  const documents =
+    getDocuments();
+
+
+  const filtered =
+    documents.filter(
+      function(doc){
+
+        const name =
+          String(
+            doc.name || ""
+          ).toLowerCase();
+
+
+        const fileName =
+          String(
+            doc.fileName || ""
+          ).toLowerCase();
+
+
+        const searchMatch =
+          name.includes(search) ||
+          fileName.includes(search);
+
+
+        const categoryMatch =
+          category === "All" ||
+          doc.category === category;
+
+
+        return (
+          searchMatch &&
+          categoryMatch
+        );
+
+      }
+    );
+
+
+  if(!filtered.length){
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div style="font-size:40px;">
+          📂
+        </div>
+
+        <h3 style="margin:10px 0;">
+          No documents found
+        </h3>
+
+        <p>
+          Upload a document to see it here.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    filtered.map(
+      function(doc){
+
+        let expiryStatus = "";
+
+
+        if(doc.expiry){
+
+          const today =
+            new Date();
+
+          today.setHours(
+            0,0,0,0
+          );
+
+
+          const expiry =
+            new Date(
+              doc.expiry +
+              "T00:00:00"
+            );
+
+
+          if(expiry < today){
+
+            expiryStatus =
+              `<div class="expired">
+                ⚠️ Document expired
+              </div>`;
+
+          }else{
+
+            expiryStatus =
+              `<div class="valid">
+                ✓ Document valid
+              </div>`;
+
+          }
+
+        }
+
+
+        return `
+
+          <div class="document">
+
+            <div class="doc-top">
+
+              <div>
+
+                <div class="doc-name">
+
+                  ${escapeHTML(
+                    doc.name ||
+                    "Unnamed Document"
+                  )}
+
+                </div>
+
+
+                <div class="doc-meta">
+
+                  📂
+                  ${escapeHTML(
+                    doc.category ||
+                    "Other"
+                  )}
+
+                  <br>
+
+                  📄
+                  ${escapeHTML(
+                    doc.fileName ||
+                    ""
+                  )}
+
+                  <br>
+
+                  ${
+                    doc.expiry
+                    ? "📅 Expiry: " +
+                      escapeHTML(
+                        doc.expiry
+                      )
+                    : "📅 No expiry date"
+                  }
+
+                </div>
+
+
+                ${expiryStatus}
+
+
+                ${
+                  doc.important
+                  ? `<div class="important">
+                       ⭐ Important
+                     </div>`
+                  : ""
+                }
+
+
+                ${
+                  doc.protected
+                  ? `<div class="protected">
+                       🔐 PIN Protected
+                     </div>`
+                  : ""
+                }
+
+              </div>
+
+
+              <div class="doc-icon">
+
+                ${
+                  doc.fileType ===
+                  "application/pdf"
+                  ? "📕"
+                  : "🖼️"
+                }
+
+              </div>
+
+            </div>
+
+
+            <div class="doc-actions">
+
+
+              <button
+                class="btn preview"
+                onclick="requestAction(
+                  ${doc.id},
+                  'preview'
+                )">
+
+                ${
+                  doc.protected
+                  ? "🔐 Preview"
+                  : "👁️ Preview"
+                }
+
+              </button>
+
+
+              <button
+                class="btn download"
+                onclick="requestAction(
+                  ${doc.id},
+                  'download'
+                )">
+
+                ${
+                  doc.protected
+                  ? "🔐 Download"
+                  : "📥 Download"
+                }
+
+              </button>
+
+
+              <button
+                class="btn edit"
+                onclick="requestAction(
+                  ${doc.id},
+                  'edit'
+                )">
+
+                ✏️ Edit
+
+              </button>
+
+
+              <button
+                class="btn important-btn"
+                onclick="toggleImportant(
+                  ${doc.id}
+                )">
+
+                ${
+                  doc.important
+                  ? "⭐ Unmark"
+                  : "☆ Important"
+                }
+
+              </button>
+
+
+              <button
+                class="btn protect-btn"
+                onclick="toggleProtection(
+                  ${doc.id}
+                )">
+
+                ${
+                  doc.protected
+                  ? "🔓 Remove Protection"
+                  : "🔐 Protect"
+                }
+
+              </button>
+
+
+              <button
+                class="btn delete"
+                onclick="requestAction(
+                  ${doc.id},
+                  'delete'
+                )">
+
+                🗑️ Delete
+
+              </button>
+
+
+            </div>
+
+          </div>
+
+        `;
+
+      }
+    ).join("");
+
+}
+
+
+/* =========================
+   REQUEST ACTION
+========================= */
+
+function requestAction(
+  id,
+  action
+){
+
+  const documents =
+    getDocuments();
+
+
+  const doc =
+    documents.find(
+      function(item){
+
+        return item.id === id;
+
+      }
+    );
+
+
+  if(!doc){
+
+    alert(
+      "Document not found."
+    );
+
+    return;
+
+  }
+
+
+  if(doc.protected){
+
+    pendingDocumentId =
+      id;
+
+    pendingAction =
+      action;
+
+    openDocumentPIN();
+
+    return;
+
+  }
+
+
+  performAction(
+    id,
+    action
+  );
+
+}
+
+
+/* =========================
+   PERFORM ACTION
+========================= */
+
+function performAction(
+  id,
+  action
+){
+
+  if(action === "preview"){
+
+    previewDocument(id);
+
+  }
+
+  else if(action === "download"){
+
+    downloadDocument(id);
+
+  }
+
+  else if(action === "edit"){
+
+    editDocument(id);
+
+  }
+
+  else if(action === "delete"){
+
+    deleteDocument(id);
+
+  }
+
+}
+
+
+/* =========================
+   PIN OPEN
+========================= */
+
+function openDocumentPIN(){
+
+  document.getElementById(
+    "documentPinModal"
+  ).style.display =
+    "flex";
+
+
+  document.getElementById(
+    "documentPin"
+  ).value = "";
+
+
+  document.getElementById(
+    "pinError"
+  ).textContent = "";
+
+
+  setTimeout(
+    function(){
+
+      document.getElementById(
+        "documentPin"
+      ).focus();
+
+    },
+    100
+  );
+
+}
+
+
+/* =========================
+   VERIFY PIN
+========================= */
+
+function verifyDocumentPIN(){
+
+  const entered =
+    document.getElementById(
+      "documentPin"
+    ).value;
+
+
+  const saved =
+    localStorage.getItem(
+      SECURITY_KEY
+    );
+
+
+  if(
+    entered === saved
+  ){
+
+    const id =
+      pendingDocumentId;
+
+    const action =
+      pendingAction;
+
+
+    closeDocumentPIN();
+
+
+    pendingDocumentId =
+      null;
+
+    pendingAction =
+      null;
+
+
+    performAction(
+      id,
+      action
+    );
+
+  }else{
+
+    document.getElementById(
+      "pinError"
+    ).textContent =
+      "❌ Incorrect PIN.";
+
+    document.getElementById(
+      "documentPin"
+    ).value = "";
+
+  }
+
+}
+
+
+/* =========================
+   CLOSE PIN
+========================= */
+
+function closeDocumentPIN(){
+
+  document.getElementById(
+    "documentPinModal"
+  ).style.display =
+    "none";
+
+  pendingDocumentId =
+    null;
+
+  pendingAction =
+    null;
+
+}
+
+
+/* =========================
+   PIN ENTER
+========================= */
+
+document.getElementById(
+  "documentPin"
+).addEventListener(
+  "keydown",
+  function(event){
+
+    if(event.key === "Enter"){
+
+      verifyDocumentPIN();
+
+    }
+
+  }
+);
+
+
+/* =========================
+   PREVIEW
+========================= */
+
+function previewDocument(id){
+
+  const documents =
+    getDocuments();
+
+
+  const doc =
+    documents.find(
+      function(item){
+
+        return item.id === id;
+
+      }
+    );
+
+
+  if(!doc){
+
+    return;
+
+  }
+
+
+  document.getElementById(
+    "previewTitle"
+  ).textContent =
+    doc.name;
+
+
+  const content =
+    document.getElementById(
+      "previewContent"
+    );
+
+
+  content.innerHTML = "";
+
+
+  if(
+    doc.fileType ===
+    "application/pdf"
+  ){
+
+    const iframe =
+      document.createElement(
+        "iframe"
+      );
+
+    iframe.src =
+      doc.fileData;
+
+    content.appendChild(
+      iframe
+    );
+
+  }
+
+  else if(
+    doc.fileType &&
+    doc.fileType.startsWith(
+      "image/"
+    )
+  ){
+
+    const img =
+      document.createElement(
+        "img"
+      );
+
+    img.src =
+      doc.fileData;
+
+    img.alt =
+      doc.name;
+
+    content.appendChild(
+      img
+    );
+
+  }
+
+  else{
+
+    content.innerHTML =
+      "<p>Preview not available.</p>";
+
+  }
+
+
+  document.getElementById(
+    "previewModal"
+  ).style.display =
+    "flex";
+
+}
+
+
+/* =========================
+   CLOSE PREVIEW
+========================= */
+
+function closePreview(){
+
+  document.getElementById(
+    "previewModal"
+  ).style.display =
+    "none";
+
+  document.getElementById(
+    "previewContent"
+  ).innerHTML =
+    "";
+
+}
+
+
+/* =========================
+   DOWNLOAD
+========================= */
+
+function downloadDocument(id){
+
+  const documents =
+    getDocuments();
+
+
+  const doc =
+    documents.find(
+      function(item){
+
+        return item.id === id;
+
+      }
+    );
+
+
+  if(!doc){
+
+    return;
+
+  }
+
+
+  const link =
+    document.createElement(
+      "a"
+    );
+
+
+  link.href =
+    doc.fileData;
+
+  link.download =
+    doc.fileName;
+
+
+  document.body.appendChild(
+    link
+  );
+
+  link.click();
+
+  link.remove();
+
+}
+
+
+/* =========================
+   IMPORTANT
+========================= */
+
+function toggleImportant(id){
+
+  let documents =
+    getDocuments();
+
+
+  documents =
+    documents.map(
+      function(doc){
+
+        if(doc.id === id){
+
+          doc.important =
+            !doc.important;
+
+        }
+
+        return doc;
+
+      }
+    );
+
+
+  setDocuments(
+    documents
+  );
+
+
+  renderDocuments();
+
+  updateStats();
+
+}
+
+
+/* =========================
+   PROTECTION
+========================= */
+
+function toggleProtection(id){
+
+  let documents =
+    getDocuments();
+
+
+  const doc =
+    documents.find(
+      function(item){
+
+        return item.id === id;
+
+      }
+    );
+
+
+  if(!doc){
+
+    return;
+
+  }
+
+
+  if(
+    !doc.protected &&
+    !localStorage.getItem(
+      SECURITY_KEY
+    )
+  ){
+
+    alert(
+      "Please set your JeevanVault PIN first."
+    );
+
+    return;
+
+  }
+
+
+  doc.protected =
+    !doc.protected;
+
+
+  setDocuments(
+    documents
+  );
+
+
+  renderDocuments();
+
+
+  alert(
+    doc.protected
+    ? "Document protected with PIN ✓"
+    : "Document protection removed."
+  );
+
+}
+
+
+/* =========================
+   EDIT
+========================= */
+
+function editDocument(id){
+
+  const documents =
+    getDocuments();
+
+
+  const doc =
+    documents.find(
+      function(item){
+
+        return item.id === id;
+
+      }
+    );
+
+
+  if(!doc){
+
+    return;
+
+  }
+
+
+  editingDocumentId =
+    id;
+
+
+  document.getElementById(
+    "editName"
+  ).value =
+    doc.name || "";
+
+
+  document.getElementById(
+    "editCategory"
+  ).value =
+    doc.category || "Other";
+
+
+  document.getElementById(
+    "editExpiry"
+  ).value =
+    doc.expiry || "";
+
+
+  document.getElementById(
+    "editImportant"
+  ).checked =
+    !!doc.important;
+
+
+  document.getElementById(
+    "editProtected"
+  ).checked =
+    !!doc.protected;
+
+
+  document.getElementById(
+    "editModal"
+  ).style.display =
+    "flex";
+
+}
+
+
+/* =========================
+   SAVE EDIT
+========================= */
+
+function saveEdit(){
+
+  if(
+    editingDocumentId === null
+  ){
+
+    return;
+
+  }
+
+
+  const name =
+    document.getElementById(
+      "editName"
+    ).value.trim();
+
+
+  if(!name){
+
+    alert(
+      "Please enter document name."
+    );
+
+    return;
+
+  }
+
+
+  const protectedValue =
+    document.getElementById(
+      "editProtected"
+    ).checked;
+
+
+  if(
+    protectedValue &&
+    !localStorage.getItem(
+      SECURITY_KEY
+    )
+  ){
+
+    alert(
+      "Please set your JeevanVault PIN first."
+    );
+
+    return;
+
+  }
+
+
+  let documents =
+    getDocuments();
+
+
+  documents =
+    documents.map(
+      function(doc){
+
+        if(
+          doc.id ===
+          editingDocumentId
+        ){
+
+          doc.name =
+            name;
+
+          doc.category =
+            document.getElementById(
+              "editCategory"
+            ).value;
+
+          doc.expiry =
+            document.getElementById(
+              "editExpiry"
+            ).value;
+
+          doc.important =
+            document.getElementById(
+              "editImportant"
+            ).checked;
+
+          doc.protected =
+            protectedValue;
+
+        }
+
+        return doc;
+
+      }
+    );
+
+
+  setDocuments(
+    documents
+  );
+
+
+  closeEdit();
+
+  renderDocuments();
+
+  updateStats();
+
+
+  alert(
+    "Document updated successfully ✓"
+  );
+
+}
+
+
+/* =========================
+   CLOSE EDIT
+========================= */
+
+function closeEdit(){
+
+  editingDocumentId =
+    null;
+
+
+  document.getElementById(
+    "editModal"
+  ).style.display =
+    "none";
+
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+function deleteDocument(id){
+
+  if(
+    !confirm(
+      "Are you sure you want to delete this document?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  let documents =
+    getDocuments();
+
+
+  documents =
+    documents.filter(
+      function(doc){
+
+        return doc.id !== id;
+
+      }
+    );
+
+
+  setDocuments(
+    documents
+  );
+
+
+  renderDocuments();
+
+  updateStats();
+
+
+  alert(
+    "Document deleted successfully."
+  );
+
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+function updateStats(){
+
+  const documents =
+    getDocuments();
+
+
+  const important =
+    documents.filter(
+      function(doc){
+
+        return doc.important;
+
+      }
+    ).length;
+
+
+  const categories =
+    new Set(
+      documents.map(
+        function(doc){
+
+          return doc.category;
+
+        }
+      )
+    );
+
+
+  document.getElementById(
+    "totalCount"
+  ).textContent =
+    documents.length;
+
+
+  document.getElementById(
+    "importantCount"
+  ).textContent =
+    important;
+
+
+  document.getElementById(
+    "categoryCount"
+  ).textContent =
+    categories.size;
+
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(text){
+
+  return String(text)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =========================
+   MODAL OUTSIDE CLICK
+========================= */
+
+document.getElementById(
+  "previewModal"
+).addEventListener(
+  "click",
+  function(event){
+
+    if(event.target === this){
+
+      closePreview();
+
+    }
+
+  }
+);
+
+
+document.getElementById(
+  "editModal"
+).addEventListener(
+  "click",
+  function(event){
+
+    if(event.target === this){
+
+      closeEdit();
+
+    }
+
+  }
+);
+
+
+document.getElementById(
+  "documentPinModal"
+).addEventListener(
+  "click",
+  function(event){
+
+    if(event.target === this){
+
+      closeDocumentPIN();
+
+    }
+
+  }
+);
+
+
+/* =========================
+   START
+========================= */
+
+renderDocuments();
+
+updateStats();
+
+</script>
+<!-- =========================================================
+     JEEVANVAULT - NEW DOCUMENT PROTECTION SYSTEM
+     Paste this code just before </body>
+========================================================= -->
+
+<style>
+
+#jvProtectModal .pin-box{
+  max-width:400px;
+}
+
+#jvProtectModal .pin-title{
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+#jvProtectModal .pin-subtitle{
+  color:#6b7280;
+  font-size:14px;
+  line-height:1.5;
+  margin-bottom:18px;
+}
+
+#jvProtectModal .jv-pin-input{
+  width:100%;
+  padding:14px;
+  border:1px solid #d1d5db;
+  border-radius:10px;
+  outline:none;
+  text-align:center;
+  font-size:21px;
+  letter-spacing:5px;
+  margin-bottom:10px;
+}
+
+#jvProtectModal .jv-pin-input:focus{
+  border-color:#7c3aed;
+}
+
+#jvProtectModal .jv-error{
+  min-height:22px;
+  color:#dc2626;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:5px;
+}
+
+#jvProtectModal .jv-primary{
+  width:100%;
+  padding:13px;
+  border:none;
+  border-radius:9px;
+  background:#7c3aed;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+#jvProtectModal .jv-secondary{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:9px;
+  background:#e5e7eb;
+  color:#374151;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:9px;
+}
+
+.jv-protected-card{
+  border-color:#c4b5fd !important;
+}
+
+.jv-protected-badge{
+  display:inline-block;
+  margin-top:6px;
+  padding:4px 8px;
+  border-radius:7px;
+  background:#ede9fe;
+  color:#6d28d9;
+  font-size:12px;
+  font-weight:bold;
+}
+
+</style>
+
+
+<!-- =========================================================
+     NEW PROTECTION MODAL
+========================================================= -->
+
+<div
+  class="modal"
+  id="jvProtectModal"
+>
+
+  <div class="modal-box pin-box">
+
+    <div
+      class="pin-icon"
+      id="jvProtectIcon"
+    >
+      🔐
+    </div>
+
+
+    <div
+      class="pin-title"
+      id="jvProtectTitle"
+    >
+      Protect Document
+    </div>
+
+
+    <div
+      class="pin-subtitle"
+      id="jvProtectSubtitle"
+    >
+      Create a separate PIN for this document.
+    </div>
+
+
+    <input
+      type="password"
+      id="jvProtectPIN"
+      class="jv-pin-input"
+      inputmode="numeric"
+      maxlength="6"
+      autocomplete="off"
+      placeholder="Enter PIN"
+    >
+
+
+    <input
+      type="password"
+      id="jvProtectConfirm"
+      class="jv-pin-input"
+      inputmode="numeric"
+      maxlength="6"
+      autocomplete="off"
+      placeholder="Confirm PIN"
+    >
+
+
+    <div
+      class="jv-error"
+      id="jvProtectError"
+    ></div>
+
+
+    <button
+      class="jv-primary"
+      id="jvProtectButton"
+      onclick="jvHandleProtection()"
+    >
+      🔒 Protect Document
+    </button>
+
+
+    <button
+      class="jv-secondary"
+      onclick="jvCloseProtection()"
+    >
+      Cancel
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   JEEVANVAULT DOCUMENT PIN PROTECTION
+========================================================= */
+
+
+/* =========================
+   PROTECTION SETTINGS
+========================= */
+
+const JV_DOCUMENT_PIN_MIN = 4;
+
+const JV_DOCUMENT_PIN_MAX = 6;
+
+const JV_MAX_ATTEMPTS = 5;
+
+const JV_LOCK_TIME = 30000;
+
+
+/* =========================
+   CURRENT STATE
+========================= */
+
+let jvProtectionDocumentId = null;
+
+let jvProtectionMode = "protect";
+
+let jvPendingDocumentId = null;
+
+let jvPendingAction = null;
+
+
+/* =========================
+   WRONG PIN STATE
+========================= */
+
+const jvFailedAttempts = {};
+
+const jvLockedUntil = {};
+
+
+/* =========================================================
+   GET DOCUMENT
+========================================================= */
+
+function jvGetDocument(id){
+
+  const documents =
+    getDocuments();
+
+  return documents.find(
+    function(doc){
+
+      return String(doc.id) === String(id);
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   SAVE DOCUMENTS
+========================================================= */
+
+function jvSaveDocuments(documents){
+
+  try{
+
+    setDocuments(documents);
+
+    return true;
+
+  }catch(error){
+
+    alert(
+      "Unable to save protection settings."
+    );
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================================================
+   VALIDATE PIN
+========================================================= */
+
+function jvValidPIN(pin){
+
+  return /^\d{4,6}$/.test(pin);
+
+}
+
+
+/* =========================================================
+   OPEN PROTECT WINDOW
+========================================================= */
+
+function jvOpenProtect(id){
+
+  const doc =
+    jvGetDocument(id);
+
+  if(!doc){
+
+    alert(
+      "Document not found."
+    );
+
+    return;
+
+  }
+
+
+  jvProtectionDocumentId =
+    id;
+
+  jvProtectionMode =
+    "protect";
+
+
+  const modal =
+    document.getElementById(
+      "jvProtectModal"
+    );
+
+
+  const icon =
+    document.getElementById(
+      "jvProtectIcon"
+    );
+
+
+  const title =
+    document.getElementById(
+      "jvProtectTitle"
+    );
+
+
+  const subtitle =
+    document.getElementById(
+      "jvProtectSubtitle"
+    );
+
+
+  const confirm =
+    document.getElementById(
+      "jvProtectConfirm"
+    );
+
+
+  const button =
+    document.getElementById(
+      "jvProtectButton"
+    );
+
+
+  const pin =
+    document.getElementById(
+      "jvProtectPIN"
+    );
+
+
+  const error =
+    document.getElementById(
+      "jvProtectError"
+    );
+
+
+  icon.textContent =
+    "🔐";
+
+
+  title.textContent =
+    "Protect Document";
+
+
+  subtitle.textContent =
+    "Create a separate 4–6 digit PIN for this document.";
+
+
+  confirm.style.display =
+    "block";
+
+
+  confirm.value =
+    "";
+
+
+  pin.value =
+    "";
+
+
+  error.textContent =
+    "";
+
+
+  button.textContent =
+    "🔒 Protect Document";
+
+
+  modal.style.display =
+    "flex";
+
+
+  setTimeout(
+    function(){
+
+      pin.focus();
+
+    },
+    100
+  );
+
+}
+
+
+/* =========================================================
+   OPEN UNPROTECT WINDOW
+========================================================= */
+
+function jvOpenUnprotect(id){
+
+  const doc =
+    jvGetDocument(id);
+
+  if(!doc){
+
+    alert(
+      "Document not found."
+    );
+
+    return;
+
+  }
+
+
+  /*
+     Old protected documents may not yet
+     have a document-specific PIN.
+  */
+
+  if(!doc.protectionPIN){
+
+    alert(
+      "This document was protected with the old system.\n\n" +
+      "You will need to create a new document PIN."
+    );
+
+
+    jvOpenProtect(id);
+
+    return;
+
+  }
+
+
+  jvProtectionDocumentId =
+    id;
+
+  jvProtectionMode =
+    "unprotect";
+
+
+  const modal =
+    document.getElementById(
+      "jvProtectModal"
+    );
+
+
+  const icon =
+    document.getElementById(
+      "jvProtectIcon"
+    );
+
+
+  const title =
+    document.getElementById(
+      "jvProtectTitle"
+    );
+
+
+  const subtitle =
+    document.getElementById(
+      "jvProtectSubtitle"
+    );
+
+
+  const confirm =
+    document.getElementById(
+      "jvProtectConfirm"
+    );
+
+
+  const button =
+    document.getElementById(
+      "jvProtectButton"
+    );
+
+
+  const pin =
+    document.getElementById(
+      "jvProtectPIN"
+    );
+
+
+  const error =
+    document.getElementById(
+      "jvProtectError"
+    );
+
+
+  icon.textContent =
+    "🔓";
+
+
+  title.textContent =
+    "Remove Protection";
+
+
+  subtitle.textContent =
+    "Enter this document's PIN to remove protection.";
+
+
+  confirm.style.display =
+    "none";
+
+
+  confirm.value =
+    "";
+
+
+  pin.value =
+    "";
+
+
+  error.textContent =
+    "";
+
+
+  button.textContent =
+    "🔓 Remove Protection";
+
+
+  modal.style.display =
+    "flex";
+
+
+  setTimeout(
+    function(){
+
+      pin.focus();
+
+    },
+    100
+  );
+
+}
+
+
+/* =========================================================
+   HANDLE PROTECT / UNPROTECT
+========================================================= */
+
+function jvHandleProtection(){
+
+  const id =
+    jvProtectionDocumentId;
+
+
+  const doc =
+    jvGetDocument(id);
+
+
+  if(!doc){
+
+    jvCloseProtection();
+
+    return;
+
+  }
+
+
+  const pinInput =
+    document.getElementById(
+      "jvProtectPIN"
+    );
+
+
+  const confirmInput =
+    document.getElementById(
+      "jvProtectConfirm"
+    );
+
+
+  const error =
+    document.getElementById(
+      "jvProtectError"
+    );
+
+
+  const pin =
+    pinInput.value.trim();
+
+
+  error.textContent =
+    "";
+
+
+  /* =====================================================
+     UNPROTECT
+  ===================================================== */
+
+  if(jvProtectionMode === "unprotect"){
+
+    if(!jvValidPIN(pin)){
+
+      error.textContent =
+        "PIN must contain 4–6 digits.";
+
+      return;
+
+    }
+
+
+    if(pin !== doc.protectionPIN){
+
+      error.textContent =
+        "❌ Incorrect document PIN.";
+
+      pinInput.value =
+        "";
+
+      pinInput.focus();
+
+      return;
+
+    }
+
+
+    let documents =
+      getDocuments();
+
+
+    documents =
+      documents.map(
+        function(item){
+
+          if(
+            String(item.id) ===
+            String(id)
+          ){
+
+            item.protected =
+              false;
+
+            delete item.protectionPIN;
+
+          }
+
+          return item;
+
+        }
+      );
+
+
+    jvSaveDocuments(
+      documents
+    );
+
+
+    jvCloseProtection();
+
+
+    renderDocuments();
+
+    updateStats();
+
+
+    alert(
+      "Document protection removed ✓"
+    );
+
+
+    return;
+
+  }
+
+
+  /* =====================================================
+     PROTECT
+  ===================================================== */
+
+  if(!jvValidPIN(pin)){
+
+    error.textContent =
+      "PIN must contain 4–6 digits only.";
+
+    pinInput.focus();
+
+    return;
+
+  }
+
+
+  const confirmPIN =
+    confirmInput.value.trim();
+
+
+  if(pin !== confirmPIN){
+
+    error.textContent =
+      "❌ PINs do not match.";
+
+    confirmInput.value =
+      "";
+
+    confirmInput.focus();
+
+    return;
+
+  }
+
+
+  let documents =
+    getDocuments();
+
+
+  documents =
+    documents.map(
+      function(item){
+
+        if(
+          String(item.id) ===
+          String(id)
+        ){
+
+          item.protected =
+            true;
+
+          item.protectionPIN =
+            pin;
+
+        }
+
+        return item;
+
+      }
+    );
+
+
+  if(
+    !jvSaveDocuments(
+      documents
+    )
+  ){
+
+    return;
+
+  }
+
+
+  jvCloseProtection();
+
+
+  renderDocuments();
+
+  updateStats();
+
+
+  alert(
+    "Document protected successfully 🔐"
+  );
+
+}
+
+
+/* =========================================================
+   CLOSE PROTECTION MODAL
+========================================================= */
+
+function jvCloseProtection(){
+
+  const modal =
+    document.getElementById(
+      "jvProtectModal"
+    );
+
+
+  modal.style.display =
+    "none";
+
+
+  document.getElementById(
+    "jvProtectPIN"
+  ).value =
+    "";
+
+
+  document.getElementById(
+    "jvProtectConfirm"
+  ).value =
+    "";
+
+
+  document.getElementById(
+    "jvProtectError"
+  ).textContent =
+    "";
+
+
+  jvProtectionDocumentId =
+    null;
+
+}
+
+
+/* =========================================================
+   TOGGLE PROTECTION
+========================================================= */
+
+function toggleProtection(id){
+
+  const doc =
+    jvGetDocument(id);
+
+
+  if(!doc){
+
+    return;
+
+  }
+
+
+  if(doc.protected){
+
+    jvOpenUnprotect(id);
+
+  }
+
+  else{
+
+    jvOpenProtect(id);
+
+  }
+
+}
+
+
+/* =========================================================
+   CHECK LOCK STATUS
+========================================================= */
+
+function jvIsLocked(id){
+
+  const lockedUntil =
+    jvLockedUntil[id] || 0;
+
+
+  if(
+    Date.now() < lockedUntil
+  ){
+
+    return true;
+
+  }
+
+
+  delete jvLockedUntil[id];
+
+  jvFailedAttempts[id] =
+    0;
+
+
+  return false;
+
+}
+
+
+/* =========================================================
+   FORMAT REMAINING LOCK TIME
+========================================================= */
+
+function jvRemainingLockTime(id){
+
+  const remaining =
+    Math.ceil(
+      (
+        jvLockedUntil[id] -
+        Date.now()
+      ) / 1000
+    );
+
+
+  return Math.max(
+    0,
+    remaining
+  );
+
+}
+
+
+/* =========================================================
+   REQUEST PROTECTED ACTION
+========================================================= */
+
+function requestAction(
+  id,
+  action
+){
+
+  const doc =
+    jvGetDocument(id);
+
+
+  if(!doc){
+
+    alert(
+      "Document not found."
+    );
+
+    return;
+
+  }
+
+
+  if(!doc.protected){
+
+    performAction(
+      id,
+      action
+    );
+
+    return;
+
+  }
+
+
+  /*
+     If an old protected document has
+     no document PIN, ask the user to
+     create one first.
+  */
+
+  if(!doc.protectionPIN){
+
+    alert(
+      "This document uses the old protection system.\n\n" +
+      "Please create a new document PIN first."
+    );
+
+
+    jvOpenProtect(id);
+
+    return;
+
+  }
+
+
+  if(
+    jvIsLocked(id)
+  ){
+
+    alert(
+      "🔒 Document temporarily locked.\n\n" +
+      "Try again in " +
+      jvRemainingLockTime(id) +
+      " seconds."
+    );
+
+    return;
+
+  }
+
+
+  jvPendingDocumentId =
+    id;
+
+  jvPendingAction =
+    action;
+
+
+  jvOpenDocumentUnlock();
+
+}
+
+
+/* =========================================================
+   OPEN DOCUMENT UNLOCK
+========================================================= */
+
+function jvOpenDocumentUnlock(){
+
+  const modal =
+    document.getElementById(
+      "documentPinModal"
+    );
+
+
+  const title =
+    modal.querySelector(
+      "h2"
+    );
+
+
+  const text =
+    modal.querySelector(
+      "p"
+    );
+
+
+  const input =
+    document.getElementById(
+      "documentPin"
+    );
+
+
+  const error =
+    document.getElementById(
+      "pinError"
+    );
+
+
+  if(title){
+
+    title.textContent =
+      "Protected Document";
+
+  }
+
+
+  if(text){
+
+    text.textContent =
+      "Enter this document's PIN to continue.";
+
+  }
+
+
+  input.value =
+    "";
+
+
+  error.textContent =
+    "";
+
+
+  modal.style.display =
+    "flex";
+
+
+  setTimeout(
+    function(){
+
+      input.focus();
+
+    },
+    100
+  );
+
+}
+
+
+/* =========================================================
+   VERIFY DOCUMENT PIN
+========================================================= */
+
+function verifyDocumentPIN(){
+
+  const id =
+    jvPendingDocumentId;
+
+
+  const action =
+    jvPendingAction;
+
+
+  const doc =
+    jvGetDocument(id);
+
+
+  if(!doc){
+
+    closeDocumentPIN();
+
+    return;
+
+  }
+
+
+  if(
+    jvIsLocked(id)
+  ){
+
+    document.getElementById(
+      "pinError"
+    ).textContent =
+      "🔒 Document temporarily locked.";
+
+    return;
+
+  }
+
+
+  const entered =
+    document.getElementById(
+      "documentPin"
+    ).value.trim();
+
+
+  if(
+    entered ===
+    doc.protectionPIN
+  ){
+
+    jvFailedAttempts[id] =
+      0;
+
+
+    closeDocumentPIN();
+
+
+    jvPendingDocumentId =
+      null;
+
+    jvPendingAction =
+      null;
+
+
+    performAction(
+      id,
+      action
+    );
+
+
+    return;
+
+  }
+
+
+  /* =====================================================
+     WRONG PIN
+  ===================================================== */
+
+  jvFailedAttempts[id] =
+    (jvFailedAttempts[id] || 0) + 1;
+
+
+  const attempts =
+    jvFailedAttempts[id];
+
+
+  const error =
+    document.getElementById(
+      "pinError"
+    );
+
+
+  document.getElementById(
+    "documentPin"
+  ).value =
+    "";
+
+
+  if(
+    attempts >=
+    JV_MAX_ATTEMPTS
+  ){
+
+    jvLockedUntil[id] =
+      Date.now() +
+      JV_LOCK_TIME;
+
+
+    jvFailedAttempts[id] =
+      0;
+
+
+    error.textContent =
+      "🔒 Too many incorrect attempts. Locked for 30 seconds.";
+
+    return;
+
+  }
+
+
+  const left =
+    JV_MAX_ATTEMPTS -
+    attempts;
+
+
+  error.textContent =
+    "❌ Incorrect PIN. " +
+    left +
+    " attempt" +
+    (
+      left === 1
+      ? ""
+      : "s"
+    ) +
+    " remaining.";
+
+}
+
+
+/* =========================================================
+   EDIT PROTECTION
+========================================================= */
+
+function saveEdit(){
+
+  if(
+    typeof editingDocumentId ===
+    "undefined" ||
+    editingDocumentId === null
+  ){
+
+    return;
+
+  }
+
+
+  const name =
+    document.getElementById(
+      "editName"
+    ).value.trim();
+
+
+  if(!name){
+
+    alert(
+      "Please enter document name."
+    );
+
+    return;
+
+  }
+
+
+  const protectedValue =
+    document.getElementById(
+      "editProtected"
+    ).checked;
+
+
+  let documents =
+    getDocuments();
+
+
+  const currentDoc =
+    documents.find(
+      function(doc){
+
+        return String(doc.id) ===
+          String(editingDocumentId);
+
+      }
+    );
+
+
+  if(!currentDoc){
+
+    return;
+
+  }
+
+
+  /*
+     If protection is being turned ON
+     from Edit and no document PIN exists,
+     don't silently use the Vault PIN.
+  */
+
+  if(
+    protectedValue &&
+    !currentDoc.protected
+  ){
+
+    closeEdit();
+
+
+    jvOpenProtect(
+      editingDocumentId
+    );
+
+
+    return;
+
+  }
+
+
+  /*
+     Do not remove protection accidentally
+     from Edit.
+  */
+
+  if(
+    currentDoc.protected &&
+    !protectedValue
+  ){
+
+    alert(
+      "This document is protected.\n\n" +
+      "Remove protection using the 🔓 Remove Protection button."
+    );
+
+
+    return;
+
+  }
+
+
+  documents =
+    documents.map(
+      function(doc){
+
+        if(
+          String(doc.id) ===
+          String(editingDocumentId)
+        ){
+
+          doc.name =
+            name;
+
+          doc.category =
+            document.getElementById(
+              "editCategory"
+            ).value;
+
+          doc.expiry =
+            document.getElementById(
+              "editExpiry"
+            ).value;
+
+          doc.important =
+            document.getElementById(
+              "editImportant"
+            ).checked;
+
+        }
+
+        return doc;
+
+      }
+    );
+
+
+  setDocuments(
+    documents
+  );
+
+
+  closeEdit();
+
+  renderDocuments();
+
+  updateStats();
+
+
+  alert(
+    "Document updated successfully ✓"
+  );
+
+}
+
+
+/* =========================================================
+   MODAL OUTSIDE CLICK
+========================================================= */
+
+const jvProtectModal =
+  document.getElementById(
+    "jvProtectModal"
+  );
+
+
+if(jvProtectModal){
+
+  jvProtectModal.addEventListener(
+    "click",
+    function(event){
+
+      if(
+        event.target ===
+        this
+      ){
+
+        jvCloseProtection();
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   ENTER KEY - PROTECT MODAL
+========================================================= */
+
+document.getElementById(
+  "jvProtectPIN"
+).addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key ===
+      "Enter"
+    ){
+
+      jvHandleProtection();
+
+    }
+
+  }
+);
+
+
+document.getElementById(
+  "jvProtectConfirm"
+).addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key ===
+      "Enter"
+    ){
+
+      jvHandleProtection();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   ENTER KEY - DOCUMENT UNLOCK
+========================================================= */
+
+document.getElementById(
+  "documentPin"
+).addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key ===
+      "Enter"
+    ){
+
+      verifyDocumentPIN();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   UPDATE PROTECTED UI
+========================================================= */
+
+function jvUpdateProtectionUI(){
+
+  const documents =
+    getDocuments();
+
+
+  const cards =
+    document.querySelectorAll(
+      ".document"
+    );
+
+
+  cards.forEach(
+    function(card){
+
+      const buttons =
+        card.querySelectorAll(
+          "button"
+        );
+
+
+      let id =
+        null;
+
+
+      buttons.forEach(
+        function(button){
+
+          const onclick =
+            button.getAttribute(
+              "onclick"
+            );
+
+
+          if(!onclick){
+
+            return;
+
+          }
+
+
+          const match =
+            onclick.match(
+              /\(\s*(\d+)/
+            );
+
+
+          if(match){
+
+            id =
+              Number(
+                match[1]
+              );
+
+          }
+
+        }
+      );
+
+
+      if(id === null){
+
+        return;
+
+      }
+
+
+      const doc =
+        documents.find(
+          function(item){
+
+            return String(item.id) ===
+              String(id);
+
+          }
+        );
+
+
+      if(!doc){
+
+        return;
+
+      }
+
+
+      if(doc.protected){
+
+        card.classList.add(
+          "jv-protected-card"
+        );
+
+      }
+
+      else{
+
+        card.classList.remove(
+          "jv-protected-card"
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL IF CLICKED OUTSIDE
+========================================================= */
+
+const jvOldPinModal =
+  document.getElementById(
+    "documentPinModal"
+  );
+
+
+if(jvOldPinModal){
+
+  jvOldPinModal.addEventListener(
+    "click",
+    function(event){
+
+      if(
+        event.target ===
+        this
+      ){
+
+        closeDocumentPIN();
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   INITIAL RENDER
+========================================================= */
+
+setTimeout(
+  function(){
+
+    renderDocuments();
+
+    updateStats();
+
+    jvUpdateProtectionUI();
+
+  },
+  50
+);
+
+</script>
+
+<!-- =========================================================
+     JEEVANVAULT - SECURE BACKUP & RESTORE v2
+========================================================= -->
+
+<style>
+.jv-secure-backup {
+  margin: 18px 0;
+  padding: 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+}
+
+.jv-secure-backup h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  color: #172033;
+}
+
+.jv-secure-backup p {
+  margin: 0 0 15px;
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.jv-secure-backup button {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#jvSecureCreateBackup {
+  background: #111827;
+  color: white;
+}
+
+#jvSecureRestoreBackup {
+  background: #7c3aed;
+  color: white;
+}
+
+#jvSecureBackupStatus {
+  margin-top: 12px;
+  min-height: 20px;
+  font-size: 13px;
+  font-weight: 700;
+}
+</style>
+
+
+<div class="jv-secure-backup" id="jvSecureBackupCard">
+
+  <h3>📦 Secure Backup & Restore</h3>
+
+  <p>
+    Save your JeevanVault documents and restore them later.
+    <br>
+    🔐 Password, Vault PIN and login session are never backed up.
+  </p>
+
+  <button
+    type="button"
+    id="jvSecureCreateBackup">
+    🔐 Create Secure Backup
+  </button>
+
+  <button
+    type="button"
+    id="jvSecureRestoreBackup">
+    📥 Restore Backup
+  </button>
+
+  <input
+    type="file"
+    id="jvSecureBackupFile"
+    accept=".json,application/json"
+    style="display:none;">
+
+  <div id="jvSecureBackupStatus"></div>
+
+</div>
+
+
+<script>
+(function () {
+
+  "use strict";
+
+
+  /* =====================================================
+     STORAGE
+  ===================================================== */
+
+  const DOCUMENTS_KEY =
+    "jeevanVaultDocuments";
+
+
+  const PASSWORD_KEY =
+    "jeevanVaultPassword";
+
+
+  const PIN_KEY =
+    "jeevanVaultPIN";
+
+
+  const LOGIN_KEY =
+    "jeevanVaultLoggedIn";
+
+
+  /* =====================================================
+     ELEMENTS
+  ===================================================== */
+
+  const createBtn =
+    document.getElementById(
+      "jvSecureCreateBackup"
+    );
+
+
+  const restoreBtn =
+    document.getElementById(
+      "jvSecureRestoreBackup"
+    );
+
+
+  const fileInput =
+    document.getElementById(
+      "jvSecureBackupFile"
+    );
+
+
+  const status =
+    document.getElementById(
+      "jvSecureBackupStatus"
+    );
+
+
+  /* =====================================================
+     STATUS MESSAGE
+  ===================================================== */
+
+  function setStatus(message, success) {
+
+    if (!status) {
+      return;
+    }
+
+    status.textContent =
+      message;
+
+    status.style.color =
+      success
+        ? "#15803d"
+        : "#dc2626";
+  }
+
+
+  /* =====================================================
+     READ DOCUMENTS
+  ===================================================== */
+
+  function readDocuments() {
+
+    try {
+
+      /*
+       * If the existing app already has
+       * getDocuments(), use it.
+       */
+
+      if (
+        typeof getDocuments ===
+        "function"
+      ) {
+
+        const docs =
+          getDocuments();
+
+        if (
+          Array.isArray(docs)
+        ) {
+
+          return docs;
+        }
+      }
+
+
+      /*
+       * Fallback to localStorage.
+       */
+
+      const saved =
+        localStorage.getItem(
+          DOCUMENTS_KEY
+        );
+
+
+      if (!saved) {
+        return [];
+      }
+
+
+      const parsed =
+        JSON.parse(saved);
+
+
+      return Array.isArray(parsed)
+        ? parsed
+        : [];
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "JeevanVault backup read error:",
+        error
+      );
+
+      return [];
+    }
+  }
+
+
+  /* =====================================================
+     CREATE BACKUP
+  ===================================================== */
+
+  function createSecureBackup() {
+
+    try {
+
+      const documents =
+        readDocuments();
+
+
+      const backup = {
+
+        app:
+          "JeevanVault",
+
+        backupType:
+          "Secure Backup",
+
+        backupVersion:
+          "2.0",
+
+        createdAt:
+          new Date().toISOString(),
+
+        documentCount:
+          documents.length,
+
+        excluded:
+
+          [
+            PASSWORD_KEY,
+            PIN_KEY,
+            LOGIN_KEY
+          ],
+
+        data: {
+
+          documents:
+            documents
+
+        }
+
+      };
+
+
+      const json =
+        JSON.stringify(
+          backup,
+          null,
+          2
+        );
+
+
+      const blob =
+        new Blob(
+          [json],
+          {
+            type:
+              "application/json"
+          }
+        );
+
+
+      const url =
+        URL.createObjectURL(
+          blob
+        );
+
+
+      const link =
+        document.createElement(
+          "a"
+        );
+
+
+      const date =
+        new Date()
+          .toISOString()
+          .slice(0,10);
+
+
+      link.href =
+        url;
+
+
+      link.download =
+        "JeevanVault-Secure-Backup-v2-" +
+        date +
+        ".json";
+
+
+      document.body.appendChild(
+        link
+      );
+
+
+      link.click();
+
+
+      document.body.removeChild(
+        link
+      );
+
+
+      setTimeout(
+        function () {
+
+          URL.revokeObjectURL(
+            url
+          );
+
+        },
+        1000
+      );
+
+
+      setStatus(
+        "✅ Secure backup created successfully.",
+        true
+      );
+
+
+      alert(
+        "Secure Backup created successfully!\n\n" +
+        "Documents backed up: " +
+        documents.length +
+        "\n\n" +
+        "Password: Not included\n" +
+        "Vault PIN: Not included"
+      );
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Create backup error:",
+        error
+      );
+
+
+      setStatus(
+        "❌ Backup creation failed.",
+        false
+      );
+
+
+      alert(
+        "Backup creation failed."
+      );
+    }
+  }
+
+
+  /* =====================================================
+     OPEN RESTORE FILE PICKER
+  ===================================================== */
+
+  function openRestorePicker() {
+
+    if (!fileInput) {
+      return;
+    }
+
+    fileInput.value = "";
+
+    fileInput.click();
+  }
+
+
+  /* =====================================================
+     RESTORE BACKUP
+  ===================================================== */
+
+  function restoreSecureBackup(event) {
+
+    const file =
+      event.target.files &&
+      event.target.files[0];
+
+
+    if (!file) {
+      return;
+    }
+
+
+    const reader =
+      new FileReader();
+
+
+    reader.onload =
+      function () {
+
+        try {
+
+          const backup =
+            JSON.parse(
+              reader.result
+            );
+
+
+          /* ---------------------------------------------
+             VALIDATE APP
+          --------------------------------------------- */
+
+          if (
+            !backup ||
+            backup.app !==
+              "JeevanVault"
+          ) {
+
+            throw new Error(
+              "Invalid JeevanVault backup"
+            );
+          }
+
+
+          /* ---------------------------------------------
+             VALIDATE VERSION
+          --------------------------------------------- */
+
+          if (
+            backup.backupVersion !==
+              "2.0"
+          ) {
+
+            throw new Error(
+              "Unsupported backup version"
+            );
+          }
+
+
+          /* ---------------------------------------------
+             GET DOCUMENT DATA
+          --------------------------------------------- */
+
+          if (
+            !backup.data ||
+            !Array.isArray(
+              backup.data.documents
+            )
+          ) {
+
+            throw new Error(
+              "Document data missing"
+            );
+          }
+
+
+          const documents =
+            backup.data.documents;
+
+
+          /* ---------------------------------------------
+             CONFIRM RESTORE
+          --------------------------------------------- */
+
+          const confirmed =
+            confirm(
+              "⚠️ Restore Secure Backup?\n\n" +
+
+              "Documents in backup: " +
+              documents.length +
+
+              "\n\n" +
+
+              "Current documents will be replaced.\n\n" +
+
+              "Your password will NOT change.\n" +
+
+              "Your Vault PIN will NOT change.\n\n" +
+
+              "Continue?"
+            );
+
+
+          if (!confirmed) {
+
+            return;
+          }
+
+
+          /* ---------------------------------------------
+             SAVE DOCUMENTS
+          --------------------------------------------- */
+
+          localStorage.setItem(
+            DOCUMENTS_KEY,
+            JSON.stringify(
+              documents
+            )
+          );
+
+
+          /* ---------------------------------------------
+             UPDATE EXISTING APP
+          --------------------------------------------- */
+
+          if (
+            typeof setDocuments ===
+            "function"
+          ) {
+
+            try {
+
+              setDocuments(
+                documents
+              );
+
+            }
+
+            catch (error) {
+
+              console.warn(
+                "setDocuments update skipped:",
+                error
+              );
+            }
+          }
+
+
+          if (
+            typeof renderDocuments ===
+            "function"
+          ) {
+
+            try {
+
+              renderDocuments();
+
+            }
+
+            catch (error) {
+
+              console.warn(
+                "renderDocuments update skipped:",
+                error
+              );
+            }
+          }
+
+
+          if (
+            typeof updateStats ===
+            "function"
+          ) {
+
+            try {
+
+              updateStats();
+
+            }
+
+            catch (error) {
+
+              console.warn(
+                "updateStats update skipped:",
+                error
+              );
+            }
+          }
+
+
+          setStatus(
+            "✅ Backup restored successfully.",
+            true
+          );
+
+
+          alert(
+            "Backup restored successfully!\n\n" +
+
+            "Documents restored: " +
+            documents.length +
+
+            "\n\n" +
+
+            "Password unchanged.\n" +
+            "Vault PIN unchanged."
+          );
+
+
+        }
+
+        catch (error) {
+
+          console.error(
+            "Restore error:",
+            error
+          );
+
+
+          setStatus(
+            "❌ Invalid or damaged backup file.",
+            false
+          );
+
+
+          alert(
+            "Restore failed.\n\n" +
+            "Please select a valid JeevanVault Secure Backup v2 file."
+          );
+        }
+
+      };
+
+
+    reader.onerror =
+      function () {
+
+        setStatus(
+          "❌ Unable to read backup file.",
+          false
+        );
+
+
+        alert(
+          "Unable to read the backup file."
+        );
+      };
+
+
+    reader.readAsText(
+      file
+    );
+  }
+
+
+  /* =====================================================
+     CONNECT BUTTONS
+  ===================================================== */
+
+  if (createBtn) {
+
+    createBtn.addEventListener(
+      "click",
+      createSecureBackup
+    );
+  }
+
+
+  if (restoreBtn) {
+
+    restoreBtn.addEventListener(
+      "click",
+      openRestorePicker
+    );
+  }
+
+
+  if (fileInput) {
+
+    fileInput.addEventListener(
+      "change",
+      restoreSecureBackup
+    );
+  }
+
+
+})();
+</script>
+</body>
+
+</html>
