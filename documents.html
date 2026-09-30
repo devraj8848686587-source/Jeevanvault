@@ -2716,26 +2716,42 @@ updateStats();
     </div>
 
 
-    <input
-      type="password"
-      id="jvProtectPIN"
-      class="jv-pin-input"
-      inputmode="numeric"
-      maxlength="6"
-      autocomplete="off"
-      placeholder="Enter PIN"
-    >
+   <div style="position:relative;">
+  <input
+    type="password"
+    id="jvProtectPIN"
+    class="jv-pin-input"
+    inputmode="numeric"
+    maxlength="6"
+    autocomplete="off"
+    placeholder="Enter PIN"
+    style="padding-right:50px;"
+  >
+  <button
+    type="button"
+    onclick="jvTogglePIN('jvProtectPIN', this)"
+    style="position:absolute;right:10px;top:50%;transform:translateY(-50%);border:none;background:none;font-size:20px;cursor:pointer;"
+  >👁️</button>
+</div> 
 
 
-    <input
-      type="password"
-      id="jvProtectConfirm"
-      class="jv-pin-input"
-      inputmode="numeric"
-      maxlength="6"
-      autocomplete="off"
-      placeholder="Confirm PIN"
-    >
+  <div style="position:relative;">
+  <input
+    type="password"
+    id="jvProtectConfirm"
+    class="jv-pin-input"
+    inputmode="numeric"
+    maxlength="6"
+    autocomplete="off"
+    placeholder="Confirm PIN"
+    style="padding-right:50px;"
+  >
+  <button
+    type="button"
+    onclick="jvTogglePIN('jvProtectConfirm', this)"
+    style="position:absolute;right:10px;top:50%;transform:translateY(-50%);border:none;background:none;font-size:20px;cursor:pointer;"
+  >👁️</button>
+</div>
 
 
     <div
@@ -2764,7 +2780,17 @@ updateStats();
 
 </div>
 
+function jvTogglePIN(inputId, button){
+  const input = document.getElementById(inputId);
 
+  if(input.type === "password"){
+    input.type = "text";
+    button.textContent = "🙈";
+  }else{
+    input.type = "password";
+    button.textContent = "👁️";
+  }
+}
 <script>
 
 /* =========================================================
