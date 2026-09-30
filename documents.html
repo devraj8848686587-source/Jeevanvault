@@ -1352,9 +1352,77 @@ function renderDocuments(){
           fileName.includes(search);
 
 
-        const categoryMatch =
-          category === "All" ||
-          doc.category === category;
+        let categoryMatch = false;
+
+if(category === "All"){
+
+  categoryMatch = true;
+
+}
+else if(
+  category === "Expired"
+){
+
+  if(doc.expiry){
+
+    const today = new Date();
+
+    today.setHours(
+      0,0,0,0
+    );
+
+    const expiry = new Date(
+      doc.expiry + "T00:00:00"
+    );
+
+    categoryMatch =
+      expiry < today;
+
+  }
+
+}
+else if(
+  category === "ExpiringSoon"
+){
+
+  if(doc.expiry){
+
+    const today = new Date();
+
+    today.setHours(
+      0,0,0,0
+    );
+
+    const soonDate =
+      new Date(today);
+
+    soonDate.setDate(
+      soonDate.getDate() + 30
+    );
+
+    const expiry = new Date(
+      doc.expiry + "T00:00:00"
+    );
+
+    categoryMatch =
+      expiry >= today &&
+      expiry <= soonDate;
+
+  }
+
+}
+else{
+
+  categoryMatch =
+    doc.category === category;
+
+}
+
+
+return (
+  searchMatch &&
+  categoryMatch
+);
 
 
         return (
